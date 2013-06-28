@@ -1,0 +1,14 @@
+# Standard ignores
+/app/config.yml
+/app/logs/*
+/vendor/
+/composer.phar
+
+# Ignore system files
+.directory
+.kate-swp
+access.log
+error.log
+
+# Ignore IDE files
+.idea/*

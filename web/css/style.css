@@ -1,0 +1,90 @@
+body {background: #2A2829; color: #645A39; font-family: "Times New Roman"; font-size: 12px;}
+input[type="text"],
+input[type="password"],
+textarea {
+    border: 1px solid #645A39;
+    padding: 6px 4px;
+    outline: none;
+    -moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
+    border-radius: 2px;
+    font: 13px "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    color: #777;
+    margin: 0;
+    width: 210px;
+    max-width: 100%;
+    display: block;
+    margin-bottom: 20px;
+    background: #2A2829;
+}
+
+textarea {height: 400px;width: 100%; }
+
+body {background: #2A2829;}
+div.comment { border: 1px solid #F5D867; margin: 0 auto; }
+.comment .blue {color: #87C0DA;}
+.margin {padding: 20px;}
+.button {
+    background-color:transparent;
+    -moz-border-radius:6px;
+    -webkit-border-radius:6px;
+    border-radius:6px;
+    border:1px solid #645a39;
+    display:inline-block;
+    color:#645a39;
+    font-family:Times New Roman;
+    font-size:15px;
+    font-weight:bold;
+    padding:4px 11px;
+    text-decoration:none;
+}.button:active {
+     position:relative;
+     top:1px;
+ }
+
+.button-solid {
+    background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #87c0da), color-stop(1, #87c0da) );
+    background:-moz-linear-gradient( center top, #87c0da 5%, #87c0da 100% );
+    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#87c0da', endColorstr='#87c0da');
+    background-color:#87c0da;
+    -moz-border-radius:6px;
+    -webkit-border-radius:6px;
+    border-radius:6px;
+    border:1px solid #87c0da;
+    display:inline-block;
+    color:#2a2829;
+    font-family:Times New Roman;
+    font-size:15px;
+    font-weight:bold;
+    padding:4px 11px;
+    text-decoration:none;
+}.button-solid:hover {
+     background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #87c0da), color-stop(1, #87c0da) );
+     background:-moz-linear-gradient( center top, #87c0da 5%, #87c0da 100% );
+     filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#87c0da', endColorstr='#87c0da');
+     background-color:#87c0da;
+ }.button-solid:active {
+      position:relative;
+      top:1px;
+  }
+
+
+.blue p {
+    background: none repeat scroll 0 0 #47BC5F;
+    border: 1px solid #2A2829;
+    border-radius: 10px 10px 10px 10px;
+    color: #2A2829;
+    padding: 5px;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+pre {
+    background: none repeat scroll 0 0 #87C0DA;
+    border: 5px double #2A2829;
+    padding: 5px;
+    font-family: Courier;
+    font-size: 12px;
+    font-weight: bold;
+    color: #2A2829;
+}

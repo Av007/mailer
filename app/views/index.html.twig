@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{%  block content %}
+    <h1>Send mail</h1>
+    {% if (success) %}
+        <div class="blue">
+            <p>Message Sent!</p>
+        </div>
+    {% endif %}
+    <div class="comment">
+        <div class="content margin">
+            <pre>use , to send few email addresses</pre>
+
+            <form action="{{ path('home') }}" method="post">
+                {{ form_widget(form) }}
+                <input type="submit" name="send" value="Send" class="button"/>
+            </form>
+        </div>
+    </div>
+{% endblock %}

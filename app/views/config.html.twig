@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{%  block content %}
+    <h1>Configuration mail</h1>
+
+    <div class="comment">
+        <div class="content margin">
+            <pre>Add configuration for email</pre>
+
+            <form action="{{ path('config') }}" method="post">
+                {{ form_widget(form) }}
+                <input type="submit" name="send" value="Send" class="button"/>
+            </form>
+        </div>
+    </div>
+{% endblock %}
