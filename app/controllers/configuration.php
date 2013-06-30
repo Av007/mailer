@@ -39,11 +39,14 @@ $app->match('/config', function (Request $request) use ($app) {
             $yaml = $dumper->dump($config);
 
             file_put_contents(__DIR__.'/../config.yml', $yaml);
+
+            return $app->redirect($app['url_generator']->generate('home'));
         }
     } else {
-        $form->bind($app['swiftmailer.options']);
+        $config = new Config($app['swiftmailer.options']);
+        $errors = $app['validator']->validate($config);
 
-        if ($form->isValid()) {
+        if (count($errors) == 0) {
             return $app->redirect($app['url_generator']->generate('home'));
         }
     }

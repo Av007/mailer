@@ -17,4 +17,9 @@ foreach (glob(__DIR__ . '/../app/controllers/*.php') as $filename) {
     include $filename;
 }
 
+// load entities
+foreach (glob(__DIR__ . '/../app/entity/*.php') as $filename) {
+    include $filename;
+}
+
 $app->run();

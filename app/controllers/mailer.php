@@ -2,21 +2,18 @@
 
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Validator\Constraints as Assert;
 
 $app->match('/', function (Request $request) use ($app) {
 
-    $form = $app['form.factory']->createBuilder('form', $app['swiftmailer.options'], array('csrf_protection' => false))
-        ->add('host', 'text', array('required' => true))
-        ->add('port', 'text', array('required' => true))
-        ->add('username', 'text', array('required' => true))
-        ->add('password', 'text', array('required' => true))
-        ->add('encryption', 'text', array('required' => false))
-        ->add('auth_mode', 'text', array('required' => false))
-        ->getForm();
+//    $app['session']->set('checked', true)
+//    $app['session']->get('checked')
 
-    $form->bind($app['swiftmailer.options']);
 
-    if (!$form->isValid()) {
+    $config = new Config($app['swiftmailer.options']);
+    $errors = $app['validator']->validate($config);
+
+    if (count($errors) > 0) {
         return $app->redirect($app['url_generator']->generate('config'));
     }
 
