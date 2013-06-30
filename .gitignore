@@ -3,6 +3,7 @@
 /app/logs/*
 /vendor/
 /composer.phar
+phpunit.xml
 
 # Ignore system files
 .directory
