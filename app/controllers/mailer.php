@@ -6,9 +6,25 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 $app->match('/', function (Request $request) use ($app) {
 
-//    $app['session']->set('checked', true)
-//    $app['session']->get('checked')
+    if (!$app['session']->get('checked')) {
 
+        $xml = simplexml_load_file('../tests/Mailer/Reports/testsuites.xml');
+
+        if (!$xml) {
+            echo "run 'phpunit --log-junit ../tests/Mailer/Reports/testsuites.xml' command.";
+            exit();
+        }
+        if ($xml->testsuite->attributes()->failures || $xml->testsuite->attributes()->errors) {
+            echo "Configurations wrong!";
+            exit();
+        } else {
+            $app['session']->set('checked', true);
+        }
+    }
+
+
+    echo shell_exec('phpunit --log-junit ../tests/Mailer/Reports/testsuites.xml');
+    die;
 
     $config = new Config($app['swiftmailer.options']);
     $errors = $app['validator']->validate($config);

@@ -20,7 +20,6 @@ class Test extends WebTestCase
         $client = $this->createClient();
         $crawler = $client->request('GET', '/');
 
-        $this->assertEquals(1, 1, "Only one email sent");
         $this->assertEquals("This is my subject", 1, "Subject is correct");
     }
 }
