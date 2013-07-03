@@ -6,20 +6,33 @@ use Silex\WebTestCase;
 
 class Test extends WebTestCase
 {
+    protected $app;
+
     public function createApplication()
     {
         $app = require __DIR__.'/../../../app/app.php';
 
         $app["swiftmailer.transport"] = new \Swift_Transport_NullTransport($app['swiftmailer.transport.eventdispatcher']);
+        $this->app = $app;
 
         return $app;
     }
 
     public function testSendTest()
     {
-        $client = $this->createClient();
-        $crawler = $client->request('GET', '/');
+        if (fsockopen($this->app['swiftmailer.options']['host'], $this->app['swiftmailer.options']['port'])) {
+            die("sad");
+        }
 
-        $this->assertEquals("This is my subject", 1, "Subject is correct");
+        $message = \Swift_Message::newInstance()
+            ->setSubject('Test email')
+            ->setFrom('test@test.com')
+            ->setContentType("text/html")
+            ->setTo('v.avdeev@optimum-web.com')
+            ->setBody('Test!','text/html');
+
+        $result = $this->app['mailer']->send($message);
+
+        $this->assertEquals($result, 1, "Subject is correct");
     }
 }

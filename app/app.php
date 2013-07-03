@@ -16,7 +16,6 @@ $app->register(new FormServiceProvider());
 $app->register(new ValidatorServiceProvider());
 $app->register(new SwiftmailerServiceProvider());
 $app->register(new UrlGeneratorServiceProvider());
-$app->register(new Silex\Provider\SessionServiceProvider());
 $app->register(new TranslationServiceProvider(), array(
     'translator.messages' => array(),
 ));

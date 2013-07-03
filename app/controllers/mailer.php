@@ -6,26 +6,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 $app->match('/', function (Request $request) use ($app) {
 
-    if (!$app['session']->get('checked')) {
-
-        $xml = simplexml_load_file('../tests/Mailer/Reports/testsuites.xml');
-
-        if (!$xml) {
-            echo "run 'phpunit --log-junit ../tests/Mailer/Reports/testsuites.xml' command.";
-            exit();
-        }
-        if ($xml->testsuite->attributes()->failures || $xml->testsuite->attributes()->errors) {
-            echo "Configurations wrong!";
-            exit();
-        } else {
-            $app['session']->set('checked', true);
-        }
-    }
-
-
-    echo shell_exec('phpunit --log-junit ../tests/Mailer/Reports/testsuites.xml');
-    die;
-
+    // check config file
     $config = new Config($app['swiftmailer.options']);
     $errors = $app['validator']->validate($config);
 
@@ -33,12 +14,14 @@ $app->match('/', function (Request $request) use ($app) {
         return $app->redirect($app['url_generator']->generate('config'));
     }
 
-    $result = false;
+    // create form
+    $result = false; // send flag
     $formMail = $app['form.factory']->createBuilder('form')
         ->add('send_to', 'text', array('required' => true))
         ->add('content', 'textarea', array('required' => true))
         ->getForm();
 
+    // press send button
     if ('POST' == $request->getMethod()) {
         $formMail->bind($request);
 
@@ -46,12 +29,13 @@ $app->match('/', function (Request $request) use ($app) {
             $data = $formMail->getData();
 
             $send_to = explode(',', $data['send_to']);
+            //$send_to = array_filter($send_to);
 
             $app['mailer']->send(\Swift_Message::newInstance()
                 ->setSubject('Test email')
                 ->setFrom('test@optimum-web.com')
                 ->setContentType("text/html")
-                ->setTo(array_filter($send_to))
+                ->setTo($send_to[0])
                 ->setBody($data['content'],'text/html'));
 
             $result = true;

@@ -3,6 +3,17 @@
 {%  block content %}
     <h1>Configuration mail</h1>
 
+    {% if errors %}
+        <div class="errors">
+            <pre>The user has the following errors</pre>
+            <ul>
+                {% for error in errors %}
+                    <li>{{ error.message }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+
     <div class="comment">
         <div class="content margin">
             <pre>Add configuration for email</pre>

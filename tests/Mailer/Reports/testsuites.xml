@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuites>
-  <testsuite name="Silex Test Suite" tests="1" assertions="1" failures="1" errors="0" time="0.043520">
-    <testsuite name="Mailer\Tests\Test" file="/home/av007/hosts/test/mailer/tests/Mailer/Tests/mailTest.php" namespace="Mailer\Tests" fullPackage="Mailer.Tests" tests="1" assertions="1" failures="1" errors="0" time="0.043520">
-      <testcase name="testSendTest" class="Mailer\Tests\Test" file="/home/av007/hosts/test/mailer/tests/Mailer/Tests/mailTest.php" line="18" assertions="1" time="0.043520">
-        <failure type="PHPUnit_Framework_ExpectationFailedException">Mailer\Tests\Test::testSendTest
-Subject is correct
-Failed asserting that 1 matches expected 'This is my subject'.
+  <testsuite name="Silex Test Suite" tests="1" assertions="0" failures="0" errors="1" time="0.006747">
+    <testsuite name="Mailer\Tests\Test" file="/home/av007/hosts/test/mailer/tests/Mailer/Tests/mailTest.php" namespace="Mailer\Tests" fullPackage="Mailer.Tests" tests="1" assertions="0" failures="0" errors="1" time="0.006747">
+      <testcase name="testSendTest" class="Mailer\Tests\Test" file="/home/av007/hosts/test/mailer/tests/Mailer/Tests/mailTest.php" line="21" assertions="0" time="0.006747">
+        <error type="PHPUnit_Framework_Error_Warning">Mailer\Tests\Test::testSendTest
+fsockopen(): php_network_getaddresses: getaddrinfo failed: Name or service not known
 
 /home/av007/hosts/test/mailer/tests/Mailer/Tests/mailTest.php:23
 /usr/share/php/PHPUnit/TextUI/Command.php:176
 /usr/share/php/PHPUnit/TextUI/Command.php:129
-</failure>
+</error>
       </testcase>
     </testsuite>
   </testsuite>
