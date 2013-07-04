@@ -1,9 +1,9 @@
 # Standard ignores
 /app/config.yml
 /app/logs/*
+/spool/*
 /vendor/
 /composer.phar
-phpunit.xml
 
 # Ignore system files
 .directory

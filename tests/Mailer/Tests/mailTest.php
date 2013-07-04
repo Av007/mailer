@@ -12,18 +12,48 @@ class Test extends WebTestCase
     {
         $app = require __DIR__.'/../../../app/app.php';
 
-        $app["swiftmailer.transport"] = new \Swift_Transport_NullTransport($app['swiftmailer.transport.eventdispatcher']);
+        $app['mailer.logger'] = new \Swift_Plugins_MessageLogger();
+        $app['mailer']->registerPlugin($app['mailer.logger']);
+
         $this->app = $app;
 
         return $app;
     }
 
-    public function testSendTest()
+    /**
+     * test socket connection
+     */
+    public function testSocketTest()
     {
-        if (fsockopen($this->app['swiftmailer.options']['host'], $this->app['swiftmailer.options']['port'])) {
-            die("sad");
+        // socket test
+        $socket = (bool)fsockopen($this->app['swiftmailer.options']['host'], $this->app['swiftmailer.options']['port']);
+        $this->assertEquals($socket, true, "Socket true");
+    }
+
+    /**
+     * test email authentication
+     */
+    public function testAuthTest()
+    {
+        $transport = \Swift_SmtpTransport::newInstance($this->app['swiftmailer.options']['host'],
+            $this->app['swiftmailer.options']['port'])
+            ->setUsername($this->app['swiftmailer.options']['username'])
+            ->setPassword($this->app['swiftmailer.options']['password']);
+
+        try {
+            $transport->start();
+        } catch (\Exception $e) {
+            $this->assertFalse(TRUE);
         }
 
+        $this->assertTrue(TRUE);
+    }
+
+    /**
+     * test send mail
+     */
+    public function testSendTest()
+    {
         $message = \Swift_Message::newInstance()
             ->setSubject('Test email')
             ->setFrom('test@test.com')
@@ -32,7 +62,11 @@ class Test extends WebTestCase
             ->setBody('Test!','text/html');
 
         $result = $this->app['mailer']->send($message);
+        $this->assertEquals($result, 1, "Sent to spool");
 
-        $this->assertEquals($result, 1, "Subject is correct");
+        $this->assertEquals(1, $this->app['mailer.logger']->countMessages(), "Only one email sent");
+
+        $emails = $this->app['mailer.logger']->getMessages();
+        $this->assertEquals("Test email", $emails[0]->getSubject(), "Subject is correct");
     }
 }

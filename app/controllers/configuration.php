@@ -35,29 +35,50 @@ $app->match('/config', function (Request $request) use ($app) {
                 }
             }
 
+            // write config
             $dumper = new Dumper();
             $yaml = $dumper->dump($config);
 
             file_put_contents(__DIR__.'/../config.yml', $yaml);
+            $errors = $app['validator']->validate($config);
 
+            // run and load phpunit test
             shell_exec('phpunit --log-junit ../tests/Mailer/Reports/testsuites.xml -c ../phpunit.xml');
             $xml = simplexml_load_file('../tests/Mailer/Reports/testsuites.xml');
 
-            if ($xml && ($xml->testsuite->attributes()->failures != 0)
-                || ($xml->testsuite->attributes()->errors != 0)) {
-                echo "Configurations wrong! run 'phpunit --log-junit ../tests/Mailer/Reports/testsuites.xml' command.";
-                exit();
+            if(!$xml) {
+                throw (new \Exception('Test is broken!') );
+                return;
             }
 
-            return $app->redirect($app['url_generator']->generate('home'));
+            // add custom validation
+            if ($xml && ($xml->testsuite->attributes()->failures != 0)
+                || ($xml->testsuite->attributes()->errors != 0)) {
+
+                $validation = new \Symfony\Component\Validator\ConstraintViolation('Configurations wrong', null, array(), null, null, null);
+                $errors->add($validation);
+            }
+
+            // success
+            if (count($errors) == 0) {
+                return $app->redirect($app['url_generator']->generate('home'));
+            }
         }
     } else {
+        // validate config structure
         $config = new Config($app['swiftmailer.options']);
         $errors = $app['validator']->validate($config);
 
+        // run and load phpunit test
         shell_exec('phpunit --log-junit ../tests/Mailer/Reports/testsuites.xml -c ../phpunit.xml');
         $xml = simplexml_load_file('../tests/Mailer/Reports/testsuites.xml');
 
+        if(!$xml) {
+            throw (new \Exception('Test is broken!') );
+            return;
+        }
+
+        // add custom validation
         if ($xml && ($xml->testsuite->attributes()->failures != 0)
             || ($xml->testsuite->attributes()->errors != 0)) {
 
@@ -65,6 +86,7 @@ $app->match('/config', function (Request $request) use ($app) {
             $errors->add($validation);
         }
 
+        // success
         if (count($errors) == 0) {
             return $app->redirect($app['url_generator']->generate('home'));
         }
