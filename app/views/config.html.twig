@@ -1,11 +1,11 @@
 {% extends 'base.html.twig' %}
 
 {%  block content %}
-    <h1>Configuration mail</h1>
+    <h1>{{ 'config_mail'|trans }}</h1>
 
     {% if errors %}
         <div class="errors">
-            <pre><i></i>The user has the following errors</pre>
+            <pre><i></i>{{ 'user_errors'|trans }}</pre>
             <ul>
                 {% for error in errors %}
                     <li>{{ error.message }}</li>
@@ -16,11 +16,11 @@
 
     <div class="comment">
         <div class="content margin">
-            <pre><i></i>Add configuration for email</pre>
+            <pre><i></i>{{ 'add_config'|trans }}</pre>
 
             <form action="{{ path('config') }}" method="post">
                 {{ form_widget(form) }}
-                <input type="submit" name="send" value="Send" class="button"/>
+                <input type="submit" name="send" value="{{ 'send'|trans }}" class="button"/>
             </form>
         </div>
     </div>

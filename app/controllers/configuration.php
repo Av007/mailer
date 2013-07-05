@@ -7,13 +7,31 @@ use Symfony\Component\Yaml\Parser;
 
 $app->match('/config', function (Request $request) use ($app) {
 
-    $form = $app['form.factory']->createBuilder('form', $app['swiftmailer.options'], array('csrf_protection' => false))
-        ->add('host', 'text', array('required' => true))
-        ->add('port', 'text', array('required' => true))
-        ->add('username', 'text', array('required' => true))
-        ->add('password', 'text', array('required' => true))
-        ->add('encryption', 'text', array('required' => false))
-        ->add('auth_mode', 'text', array('required' => false))
+    $form = $app['form.factory']->createBuilder('form', $app['swiftmailer.options'])
+        ->add('host', 'text', array(
+            'required' => true,
+            'label' => 'Host'
+        ))
+        ->add('port', 'text', array(
+            'required' => true,
+            'label' => 'Port'
+        ))
+        ->add('username', 'text', array(
+            'required' => true,
+            'label' => 'Username'
+        ))
+        ->add('password', 'password', array(
+            'required' => true,
+            'label' => 'Password'
+        ))
+        ->add('encryption', 'text', array(
+            'required' => false,
+            'label' => 'Encryption'
+        ))
+        ->add('auth_mode', 'text', array(
+            'required' => false,
+            'label' => 'Authentication mode'
+        ))
         ->getForm();
 
     if ('POST' == $request->getMethod()) {
@@ -40,56 +58,34 @@ $app->match('/config', function (Request $request) use ($app) {
             $yaml = $dumper->dump($config);
 
             file_put_contents(__DIR__.'/../config.yml', $yaml);
-            $errors = $app['validator']->validate($config);
-
-            // run and load phpunit test
-            shell_exec('phpunit --log-junit ../tests/Mailer/Reports/testsuites.xml -c ../phpunit.xml');
-            $xml = simplexml_load_file('../tests/Mailer/Reports/testsuites.xml');
-
-            if(!$xml) {
-                throw (new \Exception('Test is broken!') );
-                return;
-            }
-
-            // add custom validation
-            if ($xml && ($xml->testsuite->attributes()->failures != 0)
-                || ($xml->testsuite->attributes()->errors != 0)) {
-
-                $validation = new \Symfony\Component\Validator\ConstraintViolation('Configurations wrong', null, array(), null, null, null);
-                $errors->add($validation);
-            }
-
-            // success
-            if (count($errors) == 0) {
-                return $app->redirect($app['url_generator']->generate('home'));
-            }
         }
-    } else {
-        // validate config structure
-        $config = new Config($app['swiftmailer.options']);
-        $errors = $app['validator']->validate($config);
+    }
 
-        // run and load phpunit test
-        shell_exec('phpunit --log-junit ../tests/Mailer/Reports/testsuites.xml -c ../phpunit.xml');
-        $xml = simplexml_load_file('../tests/Mailer/Reports/testsuites.xml');
+    // validate config structure
+    $config = new Config($app['swiftmailer.options']);
+    $errors = $app['validator']->validate($config);
 
-        if(!$xml) {
-            throw (new \Exception('Test is broken!') );
-            return;
-        }
+    // run and load phpunit test
+    shell_exec('phpunit --log-junit ../tests/Mailer/Reports/testsuites.xml -c ../phpunit.xml');
+    $xml = simplexml_load_file('../tests/Mailer/Reports/testsuites.xml');
 
-        // add custom validation
-        if ($xml && ($xml->testsuite->attributes()->failures != 0)
-            || ($xml->testsuite->attributes()->errors != 0)) {
+    if(!$xml) {
+        throw (new \Exception('Test is broken!') );
+        return;
+    }
 
-            $validation = new \Symfony\Component\Validator\ConstraintViolation('Configurations wrong', null, array(), null, null, null);
-            $errors->add($validation);
-        }
+    // add custom validation
+    if ($xml && ($xml->testsuite->attributes()->failures != 0)
+        || ($xml->testsuite->attributes()->errors != 0)) {
 
-        // success
-        if (count($errors) == 0) {
-            return $app->redirect($app['url_generator']->generate('home'));
-        }
+        $validation = new \Symfony\Component\Validator\ConstraintViolation($app['translator']->trans('error_config'), null, array(), null, null, null);
+        $errors->add($validation);
+    }
+
+    // success
+    if (count($errors) == 0) {
+        $app['session']->set('config', true);
+        return $app->redirect($app['url_generator']->generate('home'));
     }
 
     return $app['twig']->render('config.html.twig', array(

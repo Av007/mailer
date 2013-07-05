@@ -1,0 +1,21 @@
+config_mail: Настройка почты
+send_mail: Отправка письма
+language: Язык
+default: Выбрать язык
+choose_language: Выбор языка
+OK: Выбрать
+message_sent: Письмо отправлено!
+tip: используйте "," для отправки письма нескольким адресатам
+send: Отправить
+user_errors: Возникли следующие ошибки
+add_config: Добавление конфигураций для электронной почты
+error_config: Конфигурация не верна
+Host: Хост
+Port: Порт
+Username: Имя пользователя
+Password: Пароль
+Encryption: Шифрование
+Authentication mode: Тип аутификации
+Send to: Отправить
+Content: Содержание
+options: Настройки

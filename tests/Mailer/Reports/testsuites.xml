@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuites>
-  <testsuite name="Silex Test Suite" tests="3" assertions="5" failures="0" errors="0" time="1.350199">
-    <testsuite name="Mailer\Tests\Test" file="/home/av007/hosts/test/mailer/tests/Mailer/Tests/mailTest.php" namespace="Mailer\Tests" fullPackage="Mailer.Tests" tests="3" assertions="5" failures="0" errors="0" time="1.350199">
-      <testcase name="testSocketTest" class="Mailer\Tests\Test" file="/home/av007/hosts/test/mailer/tests/Mailer/Tests/mailTest.php" line="26" assertions="1" time="0.169384"/>
-      <testcase name="testAuthTest" class="Mailer\Tests\Test" file="/home/av007/hosts/test/mailer/tests/Mailer/Tests/mailTest.php" line="36" assertions="1" time="1.159430"/>
-      <testcase name="testSendTest" class="Mailer\Tests\Test" file="/home/av007/hosts/test/mailer/tests/Mailer/Tests/mailTest.php" line="55" assertions="3" time="0.021385"/>
+  <testsuite name="Silex Test Suite" tests="3" assertions="5" failures="0" errors="0" time="1.815443">
+    <testsuite name="Mailer\Tests\Test" file="/home/av007/hosts/test/mailer/tests/Mailer/Tests/mailTest.php" namespace="Mailer\Tests" fullPackage="Mailer.Tests" tests="3" assertions="5" failures="0" errors="0" time="1.815443">
+      <testcase name="testSocketTest" class="Mailer\Tests\Test" file="/home/av007/hosts/test/mailer/tests/Mailer/Tests/mailTest.php" line="26" assertions="1" time="0.370685"/>
+      <testcase name="testAuthTest" class="Mailer\Tests\Test" file="/home/av007/hosts/test/mailer/tests/Mailer/Tests/mailTest.php" line="36" assertions="1" time="1.424522"/>
+      <testcase name="testSendTest" class="Mailer\Tests\Test" file="/home/av007/hosts/test/mailer/tests/Mailer/Tests/mailTest.php" line="55" assertions="3" time="0.020236"/>
     </testsuite>
   </testsuite>
 </testsuites>

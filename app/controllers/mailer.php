@@ -6,19 +6,27 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 $app->match('/', function (Request $request) use ($app) {
 
-    // check config file
-    $config = new Config($app['swiftmailer.options']);
-    $errors = $app['validator']->validate($config);
+    // check lang
+    if (null === $app['session']->get('lang')) {
+        return $app->redirect($app['url_generator']->generate('lang'));
+    }
 
-    if (count($errors) > 0) {
+    // check config
+    if (null === $app['session']->get('config')) {
         return $app->redirect($app['url_generator']->generate('config'));
     }
 
     // create form
     $result = false; // send flag
     $formMail = $app['form.factory']->createBuilder('form')
-        ->add('send_to', 'text', array('required' => true))
-        ->add('content', 'textarea', array('required' => true))
+        ->add('send_to', 'text', array(
+            'required' => true,
+            'label' => 'Send to'
+        ))
+        ->add('content', 'textarea', array(
+            'required' => true,
+            'label' => 'Content'
+        ))
         ->getForm();
 
     // press send button

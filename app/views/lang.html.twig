@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{%  block content %}
+    <h1>{{ 'language'|trans }}</h1>
+
+    <div class="comment">
+        <div class="content margin">
+            <div class="center">
+                <form action="{{ path('lang') }}" method="post" class="inline_form">
+                    <div>{{ form_label(form.lang, 'choose_language'|trans) }}:</div>
+                    {{ form_widget(form.lang) }}
+                    <div class="error">{{ form_errors(form.lang) }}</div>
+
+                    {{ form_widget(form) }}
+                    <input type="submit" name="send" value="{{ 'OK'|trans }}" class="button"/>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

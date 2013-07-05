@@ -3,6 +3,10 @@
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Mapping\ClassMetadata;
 
+/**
+ * Class Config
+ * used for manipulation with config file
+ */
 class Config
 {
     public $host;
@@ -11,7 +15,11 @@ class Config
     public $password;
     public $encryption;
     public $auth_mode;
+    public $lang = 'en';
 
+    /**
+     * @param array $data
+     */
     public function __construct($data)
     {
         $this->host = $data['host'];
@@ -22,6 +30,9 @@ class Config
         $this->auth_mode = $data['auth_mode'];
     }
 
+    /**
+     * @param ClassMetadata $metadata
+     */
     static public function loadValidatorMetadata(ClassMetadata $metadata)
     {
         $metadata->addPropertyConstraint('host', new Assert\NotBlank());

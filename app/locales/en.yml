@@ -1,0 +1,13 @@
+config_mail: Configuration mail
+send_mail: Send mail
+language: Language
+default: Default language
+choose_language: Choose your language
+OK: OK
+message_sent: Message Sent!
+tip: use , to send few email addresses
+send: Send
+user_errors: The user has the following errors
+add_config: Add configuration for email
+error_config: Configuration wrong!
+options: Options

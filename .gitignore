@@ -1,9 +1,9 @@
 # Standard ignores
 /app/config.yml
 /app/logs/*
-/spool/*
 /vendor/
-/composer.phar
+composer.phar
+composer.lock
 
 # Ignore system files
 .directory

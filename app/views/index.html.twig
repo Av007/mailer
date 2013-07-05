@@ -1,19 +1,19 @@
 {% extends 'base.html.twig' %}
 
 {%  block content %}
-    <h1>Send mail</h1>
+    <h1>{{ 'send_mail'|trans }}</h1>
     {% if (success) %}
         <div class="blue">
-            <p>Message Sent!</p>
+            <p>{{ 'message_sent'|trans }}</p>
         </div>
     {% endif %}
     <div class="comment">
         <div class="content margin">
-            <pre>use , to send few email addresses</pre>
+            <pre>{{ 'tip'|trans }}</pre>
 
             <form action="{{ path('home') }}" method="post">
                 {{ form_widget(form) }}
-                <input type="submit" name="send" value="Send" class="button"/>
+                <input type="submit" name="send" value="{{ 'send'|trans }}" class="button"/>
             </form>
         </div>
     </div>
