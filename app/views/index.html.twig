@@ -2,6 +2,18 @@
 
 {%  block content %}
     <h1>{{ 'send_mail'|trans }}</h1>
+
+    {% if errors is defined and errors > 0 %}
+        <div class="errors">
+            <pre><i></i>{{ 'user_errors'|trans }}</pre>
+            <ul>
+                {% for error in errors %}
+                    <li>{{ error.message }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+
     {% if (success) %}
         <div class="blue">
             <p>{{ 'message_sent'|trans }}</p>

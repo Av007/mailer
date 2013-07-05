@@ -37,13 +37,27 @@ $app->match('/', function (Request $request) use ($app) {
             $data = $formMail->getData();
 
             $send_to = explode(',', $data['send_to']);
-            //$send_to = array_filter($send_to);
+            $send_to = array_filter($send_to);
+
+            // add custom validation
+            $emailConstraint = new Assert\Email();
+            foreach ($send_to as &$item) {
+
+                $errors = $app['validator']->validateValue($item, $emailConstraint);
+                if (count($errors) > 0) {
+                    return $app['twig']->render('index.html.twig', array(
+                        'form' => $formMail->createView(),
+                        'success' => $result,
+                        'errors' => $errors
+                    ));
+                }
+            }
 
             $app['mailer']->send(\Swift_Message::newInstance()
                 ->setSubject('Test email')
                 ->setFrom('test@optimum-web.com')
                 ->setContentType("text/html")
-                ->setTo($send_to[0])
+                ->setTo($send_to)
                 ->setBody($data['content'],'text/html'));
 
             $result = true;
@@ -52,6 +66,6 @@ $app->match('/', function (Request $request) use ($app) {
 
     return $app['twig']->render('index.html.twig', array(
         'form' => $formMail->createView(),
-        'success' => $result
+        'success' => $result,
     ));
 })->bind('home');
