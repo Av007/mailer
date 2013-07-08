@@ -1,26 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuites>
-  <testsuite name="Silex Test Suite" tests="3" assertions="4" failures="1" errors="1" time="0.041076">
-    <testsuite name="Mailer\Tests\Test" file="/home/av007/hosts/test/mailer/tests/Mailer/Tests/mailTest.php" namespace="Mailer\Tests" fullPackage="Mailer.Tests" tests="3" assertions="4" failures="1" errors="1" time="0.041076">
-      <testcase name="testSocketTest" class="Mailer\Tests\Test" file="/home/av007/hosts/test/mailer/tests/Mailer/Tests/mailTest.php" line="26" assertions="0" time="0.007185">
-        <error type="PHPUnit_Framework_Error_Warning">Mailer\Tests\Test::testSocketTest
-fsockopen(): unable to connect to :0 (Failed to parse address "")
-
-/home/av007/hosts/test/mailer/tests/Mailer/Tests/mailTest.php:29
-/usr/share/php/PHPUnit/TextUI/Command.php:176
-/usr/share/php/PHPUnit/TextUI/Command.php:129
-</error>
-      </testcase>
-      <testcase name="testAuthTest" class="Mailer\Tests\Test" file="/home/av007/hosts/test/mailer/tests/Mailer/Tests/mailTest.php" line="36" assertions="1" time="0.013074">
-        <failure type="PHPUnit_Framework_ExpectationFailedException">Mailer\Tests\Test::testAuthTest
-Failed asserting that true is false.
-
-/home/av007/hosts/test/mailer/tests/Mailer/Tests/mailTest.php:46
-/usr/share/php/PHPUnit/TextUI/Command.php:176
-/usr/share/php/PHPUnit/TextUI/Command.php:129
-</failure>
-      </testcase>
-      <testcase name="testSendTest" class="Mailer\Tests\Test" file="/home/av007/hosts/test/mailer/tests/Mailer/Tests/mailTest.php" line="55" assertions="3" time="0.020817"/>
+  <testsuite name="Silex Test Suite" tests="3" assertions="5" failures="0" errors="0" time="1.449778">
+    <testsuite name="Mailer\Tests\Test" file="/home/av007/hosts/test/mailer/tests/Mailer/Tests/mailTest.php" namespace="Mailer\Tests" fullPackage="Mailer.Tests" tests="3" assertions="5" failures="0" errors="0" time="1.449778">
+      <testcase name="testSocketTest" class="Mailer\Tests\Test" file="/home/av007/hosts/test/mailer/tests/Mailer/Tests/mailTest.php" line="26" assertions="1" time="0.184776"/>
+      <testcase name="testAuthTest" class="Mailer\Tests\Test" file="/home/av007/hosts/test/mailer/tests/Mailer/Tests/mailTest.php" line="36" assertions="1" time="1.237726"/>
+      <testcase name="testSendTest" class="Mailer\Tests\Test" file="/home/av007/hosts/test/mailer/tests/Mailer/Tests/mailTest.php" line="55" assertions="3" time="0.027276"/>
     </testsuite>
   </testsuite>
 </testsuites>

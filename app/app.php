@@ -78,6 +78,7 @@ foreach ($config['app'] as $key=>$item) {
 // apply localization
 $app->before(function () use ($app, $config) {
     $config['app']['lang'] = isset($config['app']['lang']) ? $config['app']['lang'] : 'en';
+    $app['lang'] = $config['app']['lang'];
     $app['locale'] = $config['app']['lang'];
 });
 

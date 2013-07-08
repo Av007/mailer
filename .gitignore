@@ -4,6 +4,7 @@
 /vendor/
 composer.phar
 composer.lock
+tests/Mailer/Reports/testsuites.xml
 
 # Ignore system files
 .directory
