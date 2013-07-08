@@ -7,7 +7,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 $app->match('/', function (Request $request) use ($app) {
 
     // check lang
-    if (null === $app['session']->get('lang')) {
+    if (!isset($app['swiftmailer.options']['lang'])) {
         return $app->redirect($app['url_generator']->generate('lang'));
     }
 

@@ -34,10 +34,8 @@ $app->match('/lang', function (Request $request) use ($app) {
 
             // write config
             $dumper = new Dumper();
-
             file_put_contents(__DIR__.'/../config.yml', $dumper->dump($config));
 
-            $app['session']->set('lang', true);
             return $app->redirect($app['url_generator']->generate('home'));
         }
     }
