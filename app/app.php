@@ -38,7 +38,7 @@ $app['translator'] = $app->share($app->extend('translator', function($translator
 }));
 
 // create config file
-$default = file_get_contents(__DIR__.'/config.yml.dest');
+$default = file_get_contents(__DIR__.'/config.yml.dist');
 
 if(!file_exists(__DIR__.'/config.yml')) {
     chmod(__DIR__.'/config.yml', 0777);

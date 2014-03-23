@@ -1,15 +1,15 @@
 {
     "require": {
         "silex/silex": "1.*",
-        "twig/twig": ">=1.8,<2.0-dev",
-        "symfony/form": "~2.3",
-        "symfony/validator": "~2.3",
-        "symfony/config": "~2.3",
-        "symfony/yaml": "~2.3",
-        "symfony/translation": "~2.3",
-        "symfony/locale": "~2.3",
-        "symfony/twig-bridge": "~2.3",
-        "swiftmailer/swiftmailer": ">=4.1.2,<4.2-dev",
+        "twig/twig": ">=1.8",
+        "symfony/form": "~2.4",
+        "symfony/validator": "~2.4",
+        "symfony/config": "~2.4",
+        "symfony/yaml": "~2.4",
+        "symfony/translation": "~2.4",
+        "symfony/locale": "~2.4",
+        "symfony/twig-bridge": "~2.4",
+        "swiftmailer/swiftmailer": ">=4.1.2",
         "symfony/browser-kit": "~2.1",
         "phpunit/phpunit": "3.7.*"
     }
