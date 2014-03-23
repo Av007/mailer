@@ -1,0 +1,10 @@
+# project config
+app:
+  debug: true
+  swiftmailer.options:
+    host:
+    port:
+    username:
+    password:
+    encryption:
+    auth_mode:
