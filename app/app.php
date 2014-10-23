@@ -28,11 +28,11 @@ $app->register(new Silex\Provider\TranslationServiceProvider(), array(
 ));
 
 // enable localization
-$app['translator'] = $app->share($app->extend('translator', function($translator) {
+$app['translator'] = $app->share($app->extend('translator', function(Silex\Translator $translator) {
     $translator->addLoader('yaml', new YamlFileLoader());
 
-    $translator->addResource('yaml', __DIR__.'/locales/en.yml', 'en');
-    $translator->addResource('yaml', __DIR__.'/locales/ru.yml', 'ru');
+    $translator->addResource('yaml', __DIR__ . '/locales/en.yml', 'en');
+    $translator->addResource('yaml', __DIR__ . '/locales/ru.yml', 'ru');
 
     return $translator;
 }));
@@ -79,7 +79,10 @@ foreach ($config['app'] as $key=>$item) {
 // apply localization
 $app->before(function () use ($app, $config) {
     $config['app']['lang'] = isset($config['app']['lang']) ? $config['app']['lang'] : 'en';
-    $app['locale'] = $app['lang'] = $config['app']['lang'];
+    $app['lang'] = $config['app']['lang'];
+    $app['locale'] = $config['app']['lang'];
+
+    return $app;
 });
 
 return $app;
