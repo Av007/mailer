@@ -14,5 +14,6 @@
         "swiftmailer/swiftmailer": ">=4.1.2",
         "symfony/browser-kit": "~2.1",
         "phpunit/phpunit": "3.7.*"
-    }
+    },
+    "license":"MIT"
 }
