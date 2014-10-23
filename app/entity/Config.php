@@ -1,4 +1,5 @@
 <?php
+/** Configuration model class */
 
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Mapping\ClassMetadata;
@@ -22,12 +23,12 @@ class Config
      */
     public function __construct($data)
     {
-        $this->host = $data['host'];
-        $this->port = $data['port'];
-        $this->username = $data['username'];
-        $this->password = $data['password'];
-        $this->encryption = $data['encryption'];
-        $this->auth_mode = $data['auth_mode'];
+        $this->host       = $data['host'];
+        $this->port       = $data['port'];
+        $this->username   = $data['username'];
+        $this->password   = $data['password'];
+        $this->encryption = isset($data['encryption']) ? $data['encryption'] : null;
+        $this->auth_mode  = isset($data['auth_mode']) ? $data['auth_mode'] : null;
     }
 
     /**

@@ -1,5 +1,5 @@
 {
-    "name": "Mailer",
+    "name": "av007/mailer",
     "description": "Helps sends email from localhost",
     "require": {
         "silex/silex": "1.*",
