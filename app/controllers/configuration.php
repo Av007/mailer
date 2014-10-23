@@ -70,7 +70,6 @@ $app->match('/config', function (Request $request) use ($app) {
 
     if(!$xml) {
         throw (new \Exception('Test is broken!') );
-        return;
     }
 
     // add custom validation

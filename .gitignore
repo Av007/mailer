@@ -13,4 +13,4 @@ access.log
 error.log
 
 # Ignore IDE files
-.idea/*
+.idea
