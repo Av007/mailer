@@ -6,9 +6,9 @@ use Silex\Provider\FormServiceProvider;
 use Silex\Provider\TwigServiceProvider;
 use Silex\Provider\SwiftmailerServiceProvider;
 use Silex\Provider\UrlGeneratorServiceProvider;
-use Silex\Provider\TranslationServiceProvider;
 use Silex\Provider\ValidatorServiceProvider;
 use Silex\Provider\SessionServiceProvider;
+use Symfony\Component\Yaml\Exception\ParseException;
 use Symfony\Component\Yaml\Parser;
 use Symfony\Component\Translation\Loader\YamlFileLoader;
 
@@ -28,7 +28,7 @@ $app->register(new Silex\Provider\TranslationServiceProvider(), array(
 ));
 
 // enable localization
-$app['translator'] = $app->share($app->extend('translator', function($translator, $app) {
+$app['translator'] = $app->share($app->extend('translator', function($translator) {
     $translator->addLoader('yaml', new YamlFileLoader());
 
     $translator->addResource('yaml', __DIR__.'/locales/en.yml', 'en');
@@ -40,16 +40,17 @@ $app['translator'] = $app->share($app->extend('translator', function($translator
 // create config file
 $default = file_get_contents(__DIR__.'/config.yml.dist');
 
-if(!file_exists(__DIR__.'/config.yml')) {
-    chmod(__DIR__.'/config.yml', 0777);
-    file_put_contents(__DIR__.'/config.yml', $default);
+if (!file_exists(__DIR__ . '/config.yml')) {
+    chmod(__DIR__ . '/config.yml', 0777);
+    file_put_contents(__DIR__ . '/config.yml', $default);
+    $config = $default;
 } else {
     // read config file
-    $config = file_get_contents(__DIR__.'/config.yml');
+    $config = file_get_contents(__DIR__ . '/config.yml');
 
     // put defaults
     if (!$config) {
-        file_put_contents(__DIR__.'/config.yml', $default);
+        file_put_contents(__DIR__ . '/config.yml', $default);
     }
 }
 
@@ -59,13 +60,13 @@ try {
     $config = $yaml->parse($config);
 } catch (ParseException $e) {
     printf('Unable to parse the YAML string: %s', $e->getMessage());
-    exit();
+    return;
 }
 
 // check configurations
 if (!isset($config['app'])) {
     printf('Configuration file doesn\'t exist!');
-    exit();
+    return;
 }
 
 // apply configurations

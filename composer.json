@@ -1,4 +1,6 @@
 {
+    "name": "Mailer",
+    "description": "Helps sends email from localhost",
     "require": {
         "silex/silex": "1.*",
         "twig/twig": ">=1.8",

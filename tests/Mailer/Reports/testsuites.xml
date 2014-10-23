@@ -1,10 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuites>
-  <testsuite name="Silex Test Suite" tests="3" assertions="5" failures="0" errors="0" time="1.449778">
-    <testsuite name="Mailer\Tests\Test" file="/home/av007/hosts/test/mailer/tests/Mailer/Tests/mailTest.php" namespace="Mailer\Tests" fullPackage="Mailer.Tests" tests="3" assertions="5" failures="0" errors="0" time="1.449778">
-      <testcase name="testSocketTest" class="Mailer\Tests\Test" file="/home/av007/hosts/test/mailer/tests/Mailer/Tests/mailTest.php" line="26" assertions="1" time="0.184776"/>
-      <testcase name="testAuthTest" class="Mailer\Tests\Test" file="/home/av007/hosts/test/mailer/tests/Mailer/Tests/mailTest.php" line="36" assertions="1" time="1.237726"/>
-      <testcase name="testSendTest" class="Mailer\Tests\Test" file="/home/av007/hosts/test/mailer/tests/Mailer/Tests/mailTest.php" line="55" assertions="3" time="0.027276"/>
+  <testsuite name="Silex Test Suite" tests="3" assertions="5" failures="1" errors="0" time="30.173659">
+    <testsuite name="Mailer\Tests\Test" file="/media/av007/web/mailer/tests/Mailer/Tests/mailTest.php" namespace="Mailer\Tests" fullPackage="Mailer.Tests" tests="3" assertions="5" failures="1" errors="0" time="30.173659">
+      <testcase name="testSocketTest" class="Mailer\Tests\Test" file="/media/av007/web/mailer/tests/Mailer/Tests/mailTest.php" line="26" assertions="1" time="0.079737"/>
+      <testcase name="testAuthTest" class="Mailer\Tests\Test" file="/media/av007/web/mailer/tests/Mailer/Tests/mailTest.php" line="36" assertions="1" time="30.082347">
+        <failure type="PHPUnit_Framework_ExpectationFailedException">Mailer\Tests\Test::testAuthTest
+Failed asserting that true is false.
+
+/media/av007/web/mailer/tests/Mailer/Tests/mailTest.php:46
+</failure>
+      </testcase>
+      <testcase name="testSendTest" class="Mailer\Tests\Test" file="/media/av007/web/mailer/tests/Mailer/Tests/mailTest.php" line="55" assertions="3" time="0.011575"/>
     </testsuite>
   </testsuite>
 </testsuites>
