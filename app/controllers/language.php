@@ -1,6 +1,5 @@
 <?php
 
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Yaml\Dumper;
 use Symfony\Component\Yaml\Parser;
@@ -39,7 +38,6 @@ $app->match('/lang', function (Request $request) use ($app) {
             return $app->redirect($app['url_generator']->generate('home'));
         }
     }
-//var_dump($app['locale']); die;
 
     return $app['twig']->render('lang.html.twig', array(
         'form' => $form->createView(),
