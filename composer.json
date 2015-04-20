@@ -1,8 +1,8 @@
 {
     "name": "av007/mailer",
     "description": "Helps sends email from localhost",
-    "require": {
-        "silex/silex": "1.*",
+    "require-dev": {
+        "silex/silex": ">1.0",
         "twig/twig": "*",
         "symfony/form": "2.*",
         "symfony/validator": "2.*",
