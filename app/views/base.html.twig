@@ -4,27 +4,32 @@
     <link rel="shortcut icon" href="/web/favicon.ico" type="image/x-icon">
     <link rel="icon" href="/web/favicon.ico" type="image/x-icon">
     <link href="css/style.css" rel="stylesheet" />
-    <link rel="stylesheet" href="css/ikSelect.css" media="all">
-    <link rel="stylesheet" href="css/ikSelectCustom.css" media="all">
-    <link rel="stylesheet" href="css/normalize.min.css" media="all">
-    <script type="text/javascript" src="js/vendor/jquery-1.9.1.min.js"></script>
-    <script type="text/javascript" src="js/jquery.ikSelect.min.js"></script>
-    <script type="text/javascript" src="js/app.js"></script>
+    <link href="css/ikSelect.css" media="all" rel="stylesheet">
+    <link href="css/ikSelectCustom.css" media="all" rel="stylesheet">
+    <link href="css/normalize.min.css" media="all" rel="stylesheet">
+    <link href="fonts/Tinos-Regular.ttf" rel="stylesheet" type="text/css">
     <title>Send mail{% block title %}{% endblock %}</title>
 </head>
 <body>
-<div id="topBar">
-    <a href="#" id="more">
-        <span id="lang">{{ 'options'|trans }}</span>
-            <span id="arrow">
-                <span class="arrdown">&#x25BC;</span>
-                <span class="arrup">&#x25B2;</span>
-            </span>
-    </a>
-    <div class="dropdown">
-        <a href="{{ url('lang') }}">{{ 'language'|trans }}</a>
+
+    <div id="topBar">
+        <a href="#" id="more">
+            <span id="lang">{{ 'options'|trans }}</span>
+                <span id="arrow">
+                    <span class="arrdown">&#x25BC;</span>
+                    <span class="arrup">&#x25B2;</span>
+                </span>
+        </a>
+        <div class="dropdown">
+            <a href="{{ url('lang') }}">{{ 'language'|trans }}</a>
+        </div>
     </div>
-</div>
-{%  block content %}{% endblock %}
+
+    {%  block content %}{% endblock %}
+
+    {%  block javascript %}{% endblock %}
+<script type="text/javascript" src="js/vendor/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="js/jquery.ikSelect.min.js"></script>
+<script type="text/javascript" src="js/app.js"></script>
 </body>
 </html>

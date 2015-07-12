@@ -5,7 +5,7 @@
 
     {% if errors is defined and errors > 0 %}
         <div class="errors">
-            <pre><i></i>{{ 'user_errors'|trans }}</pre>
+            <h3><i></i>{{ 'user_errors'|trans }}</h3>
             <ul>
                 {% for error in errors %}
                     <li>{{ error.message }}</li>

@@ -5,7 +5,7 @@ use Symfony\Component\Yaml\Dumper;
 use Symfony\Component\Yaml\Parser;
 
 $app->match('/lang', function (Request $request) use ($app) {
-
+    /** @var \Symfony\Component\Form\Form $form */
     $form = $app['form.factory']->createBuilder('form', $app['swiftmailer.options'])
         ->add('lang', 'choice', array(
             'required' => false,
@@ -15,14 +15,14 @@ $app->match('/lang', function (Request $request) use ($app) {
         ->getForm();
 
     if ('POST' == $request->getMethod()) {
-        $form->bind($request);
+        $form->handleRequest($request);
 
         if ($form->isValid()) {
             $data = $form->getData();
 
             // read config file
-            $yaml = new Parser();
-            $config = $yaml->parse(file_get_contents(__DIR__.'/../config.yml'));
+            $yml = new Parser();
+            $config = $yml->parse(file_get_contents(__DIR__ . '/../config.yml'));
 
             // apply configurations
             $data['lang'] = $data['lang'] ? $data['lang'] : 'en';
@@ -33,7 +33,7 @@ $app->match('/lang', function (Request $request) use ($app) {
 
             // write config
             $dumper = new Dumper();
-            file_put_contents(__DIR__.'/../config.yml', $dumper->dump($config));
+            file_put_contents(__DIR__ . '/../config.yml', $dumper->dump($config));
 
             return $app->redirect($app['url_generator']->generate('home'));
         }

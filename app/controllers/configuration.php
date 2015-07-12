@@ -1,11 +1,12 @@
 <?php
 
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Yaml\Dumper;
 use Symfony\Component\Yaml\Parser;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Validator\ConstraintViolation;
 
 $app->match('/config', function (Request $request) use ($app) {
-
+    /** @var Symfony\Component\Form\Form $form */
     $form = $app['form.factory']->createBuilder('form', $app['swiftmailer.options'])
         ->add('host', 'text', array(
             'required' => true,
@@ -34,19 +35,22 @@ $app->match('/config', function (Request $request) use ($app) {
         ->getForm();
 
     if ('POST' == $request->getMethod()) {
-        $form->bind($request);
+        $form->handleRequest($request);
 
         if ($form->isValid()) {
 
             $data = $form->getData();
 
             // read config file
-            $yaml = new Parser();
-            $config = $yaml->parse(file_get_contents(__DIR__.'/../config.yml'));
+            $yml = new Parser();
+            /** @var array $config */
+            $config = $yml->parse(file_get_contents(__DIR__ . '/../config.yml'));
 
-            // apply configurations
-            foreach ($data as $key=>$item) {
-
+            /**
+             * @var string $key
+             * @var string $item
+             */
+            foreach ($data as $key => $item) {
                 if (array_key_exists($key, $config['app']['swiftmailer.options'])) {
                     $config['app']['swiftmailer.options'][$key] = $item;
                 }
@@ -54,14 +58,13 @@ $app->match('/config', function (Request $request) use ($app) {
 
             // write config
             $dumper = new Dumper();
-            $yaml = $dumper->dump($config);
-
-            file_put_contents(__DIR__.'/../config.yml', $yaml);
+            file_put_contents(__DIR__ . '/../config.yml', $dumper->dump($config));
         }
     }
 
     // validate config structure
     $config = new Config($app['swiftmailer.options']);
+    /** @var \Symfony\Component\Validator\ConstraintViolationList $errors */
     $errors = $app['validator']->validate($config);
 
     // run and load phpunit test
@@ -76,7 +79,7 @@ $app->match('/config', function (Request $request) use ($app) {
     if ($xml && ($xml->testsuite->attributes()->failures != 0)
         || ($xml->testsuite->attributes()->errors != 0)) {
 
-        $validation = new \Symfony\Component\Validator\ConstraintViolation($app['translator']->trans('error_config'), null, array(), null, null, null);
+        $validation = new ConstraintViolation($app['translator']->trans('error_config'), null, array(), null, null, null);
         $errors->add($validation);
     }
 

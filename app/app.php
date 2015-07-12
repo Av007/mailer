@@ -41,6 +41,7 @@ $app['translator'] = $app->share($app->extend('translator', function(Silex\Trans
 $default = file_get_contents(__DIR__.'/config.yml.dist');
 
 if (!file_exists(__DIR__ . '/config.yml')) {
+    touch(__DIR__ . '/config.yml');
     chmod(__DIR__ . '/config.yml', 0777);
     file_put_contents(__DIR__ . '/config.yml', $default);
     $config = $default;

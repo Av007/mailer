@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuites>
-  <testsuite name="Silex Test Suite" tests="3" assertions="5" failures="1" errors="0" time="30.205046">
-    <testsuite name="Mailer\Tests\Test" file="/media/av007/web/mailer/tests/Mailer/Tests/mailTest.php" namespace="Mailer\Tests" fullPackage="Mailer.Tests" tests="3" assertions="5" failures="1" errors="0" time="30.205046">
-      <testcase name="testSocketTest" class="Mailer\Tests\Test" file="/media/av007/web/mailer/tests/Mailer/Tests/mailTest.php" line="26" assertions="1" time="0.080894"/>
-      <testcase name="testAuthTest" class="Mailer\Tests\Test" file="/media/av007/web/mailer/tests/Mailer/Tests/mailTest.php" line="36" assertions="1" time="30.112881">
+  <testsuite name="Silex Test Suite" tests="3" assertions="5" failures="1" errors="0" time="30.432199">
+    <testsuite name="Mailer\Tests\Test" file="/media/av007/web/mailer/tests/Mailer/Tests/mailTest.php" tests="3" assertions="5" failures="1" errors="0" time="30.432199">
+      <testcase name="testSocketTest" class="Mailer\Tests\Test" file="/media/av007/web/mailer/tests/Mailer/Tests/mailTest.php" line="26" assertions="1" time="0.266660"/>
+      <testcase name="testAuthTest" class="Mailer\Tests\Test" file="/media/av007/web/mailer/tests/Mailer/Tests/mailTest.php" line="36" assertions="1" time="30.147285">
         <failure type="PHPUnit_Framework_ExpectationFailedException">Mailer\Tests\Test::testAuthTest
 Failed asserting that true is false.
 
 /media/av007/web/mailer/tests/Mailer/Tests/mailTest.php:46
+phar:///usr/local/bin/phpunit/phpunit/TextUI/Command.php:151
+phar:///usr/local/bin/phpunit/phpunit/TextUI/Command.php:103
 </failure>
       </testcase>
-      <testcase name="testSendTest" class="Mailer\Tests\Test" file="/media/av007/web/mailer/tests/Mailer/Tests/mailTest.php" line="55" assertions="3" time="0.011271"/>
+      <testcase name="testSendTest" class="Mailer\Tests\Test" file="/media/av007/web/mailer/tests/Mailer/Tests/mailTest.php" line="55" assertions="3" time="0.018254"/>
     </testsuite>
   </testsuite>
 </testsuites>
