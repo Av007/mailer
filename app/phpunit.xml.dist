@@ -8,15 +8,15 @@
          processIsolation="false"
          stopOnFailure="false"
          syntaxCheck="false"
-         bootstrap="app/app.php"
+         bootstrap="../web/index.php"
         >
     <testsuites>
-        <testsuite name="Silex Test Suite">
-            <directory>./tests/</directory>
+        <testsuite name="Application Test Suite">
+            <directory>../src/Mailer/Tests</directory>
         </testsuite>
     </testsuites>
-    <phpunitreport infile="./tests/Mailer/Reports/testsuites.xml"
+    <phpunitreport infile="../../app/reports/testsuites.xml"
                    format="frames"
-                   todir="./tests"
+                   todir="../../app"
                    />
 </phpunit>

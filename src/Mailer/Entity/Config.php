@@ -1,22 +1,35 @@
 <?php
 /** Configuration model class */
 
+namespace Mailer\Entity;
+
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Mapping\ClassMetadata;
 
 /**
  * Class Config
- * used for manipulation with config file
+ *
+ * Used for manipulation with config file
+ *
+ * @package Mailer\Entity
+ * @author Vladimir Avdeev <avdeevvladimir@gmail.com>
  */
 class Config
 {
-    public $host;
-    public $port;
-    public $username;
-    public $password;
-    public $encryption;
-    public $auth_mode;
-    public $lang = 'en';
+    /** @var string $host */
+    protected $host;
+    /** @var string $port */
+    protected $port;
+    /** @var string $username */
+    protected $username;
+    /** @var string $password */
+    protected $password;
+    /** @var string $encryption */
+    protected $encryption;
+    /** @var string $auth_mode */
+    protected $auth_mode;
+    /** @var string $lang */
+    protected $lang;
 
     /**
      * @param array $data
@@ -29,6 +42,7 @@ class Config
         $this->password   = $data['password'];
         $this->encryption = isset($data['encryption']) ? $data['encryption'] : null;
         $this->auth_mode  = isset($data['auth_mode']) ? $data['auth_mode'] : null;
+        $this->lang = 'en';
     }
 
     /**

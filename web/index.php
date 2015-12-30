@@ -1,20 +1,29 @@
 <?php
+/** Index file */
+require_once __DIR__ . '/../vendor/autoload.php';
 
-$filename = __DIR__ . preg_replace('#(\?.*)$#', '', $_SERVER['REQUEST_URI']);
-if (php_sapi_name() === 'cli-server' && is_file($filename)) {
-    return false;
+$bootstrap = new Mailer\Application();
+$bootstrap->init();
+
+if (in_array(php_sapi_name(), array(
+    'cli',
+    'cli-server',
+), true)) {
+
+    header('Content-Type: cli');
+
+    if (isset($_SERVER['REQUEST_URI'])) {
+        $filename = __DIR__ . preg_replace('#(\?.*)$#', '', $_SERVER['REQUEST_URI']);
+    } else {
+        $filename = '';
+    }
+    return;
+
+
+    if (is_file($filename)) {
+        return;
+    }
 }
 
-require __DIR__ . '/../app/app.php';
 
-// load controllers
-foreach (glob(__DIR__ . '/../app/controllers/*.php') as $filename) {
-    include $filename;
-}
-
-// load entities
-foreach (glob(__DIR__ . '/../app/entity/*.php') as $filename) {
-    include $filename;
-}
-
-$app->run();
+$bootstrap->getApp()->run();

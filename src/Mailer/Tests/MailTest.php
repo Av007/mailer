@@ -2,15 +2,27 @@
 
 namespace Mailer\Tests;
 
+use Mailer\Application;
 use Silex\WebTestCase;
 
+/**
+ * Class Test
+ *
+ * @package Mailer\Tests
+ * @author Vladimir Avdeev <avdeevvladimir@gmail.com>
+ */
 class Test extends WebTestCase
 {
+    /** @var Application $app */
     protected $app;
 
+    /**
+     * @return \Silex\Application
+     */
     public function createApplication()
     {
-        $app = require __DIR__.'/../../../app/app.php';
+        $application = Application::getInstance();
+        $app = $application->getApp();
 
         $app['mailer.logger'] = new \Swift_Plugins_MessageLogger();
         $app['mailer']->registerPlugin($app['mailer.logger']);
@@ -43,10 +55,10 @@ class Test extends WebTestCase
         try {
             $transport->start();
         } catch (\Exception $e) {
-            $this->assertFalse(TRUE);
+            $this->assertFalse(true);
         }
 
-        $this->assertTrue(TRUE);
+        $this->assertTrue(true);
     }
 
     /**

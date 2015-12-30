@@ -1,7 +1,11 @@
 {
     "name": "av007/mailer",
     "description": "Helps send email from localhost",
-
+    "autoload": {
+      "psr-4": {
+        "": "src/"
+      }
+    },
     "require": {
       "silex/silex": ">1.0",
       "twig/twig": "*",

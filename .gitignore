@@ -1,16 +1,9 @@
 # Standard ignores
-/app/config.yml
-/app/logs/*
+app/config/config.yml
+app/phpunit.xml
+#app/logs/*
+#app/cache/*
 /vendor/
 composer.phar
 composer.lock
-tests/Mailer/Reports/testsuites.xml
-
-# Ignore system files
-.directory
-.kate-swp
-access.log
-error.log
-
-# Ignore IDE files
-.idea
+Tests/Mailer/Reports/testsuites.xml
