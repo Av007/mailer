@@ -1,9 +1,10 @@
 # Standard ignores
 app/config/config.yml
 app/phpunit.xml
-#app/logs/*
-#app/cache/*
+app/logs/*
+app/cache/*
+
+app/reports/testsuites.xml
+
 /vendor/
 composer.phar
-composer.lock
-Tests/Mailer/Reports/testsuites.xml

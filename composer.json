@@ -9,16 +9,16 @@
     "require": {
       "silex/silex": ">1.0",
       "twig/twig": "*",
-      "symfony/form": "2.*",
-      "symfony/security-csrf": "2.*",
-      "symfony/validator": "2.*",
-      "symfony/config": "2.*",
-      "symfony/yaml": "2.*",
-      "symfony/translation": "2.*",
+      "symfony/form": "3.*",
+      "symfony/security-csrf": "3.*",
+      "symfony/validator": "3.*",
+      "symfony/config": "3.*",
+      "symfony/yaml": "3.*",
+      "symfony/translation": "3.*",
       "symfony/locale": "2.*",
-      "symfony/twig-bridge": "2.*",
+      "symfony/twig-bridge": "3.*",
       "swiftmailer/swiftmailer": "*",
-      "symfony/browser-kit": "2.*"
+      "symfony/browser-kit": "3.*"
 
     },
     "require-dev": {

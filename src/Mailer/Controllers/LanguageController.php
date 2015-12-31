@@ -3,9 +3,10 @@
 namespace Mailer\Controllers;
 
 use Mailer\Application;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Yaml\Dumper;
 use Symfony\Component\Yaml\Parser;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Form\Extension\Core\Type;
 
 /**
  * Class Language
@@ -20,11 +21,14 @@ class LanguageController
         $app = Application::getInstance()->getApp();
 
         /** @var \Symfony\Component\Form\Form $form */
-        $form = $app['form.factory']->createBuilder('form', $app['swiftmailer.options'])
-            ->add('lang', 'choice', array(
+        $form = $app['form.factory']->createBuilder(Type\FormType::class, $app['swiftmailer.options'])
+            ->add('lang', Type\ChoiceType::class, array(
                 'required' => false,
-                'choices' => array('en' => 'English', 'ru' => 'Русский'),
-                'empty_value' => 'default'
+                'choices' => array(
+                    'en' => 'English',
+                    'ru' => 'Русский'
+                ),
+                'placeholder' => 'default'
             ))
             ->getForm();
 

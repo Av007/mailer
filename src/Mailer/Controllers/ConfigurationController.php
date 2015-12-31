@@ -4,6 +4,7 @@ namespace Mailer\Controllers;
 
 use Mailer\Application;
 use Mailer\Entity\Config;
+use Symfony\Component\Form\Extension\Core\Type;
 use Symfony\Component\Yaml\Dumper;
 use Symfony\Component\Yaml\Parser;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,24 +25,24 @@ class ConfigurationController
         $appConfig = $application->getAppConfig();
 
         /** @var \Symfony\Component\Form\Form $form */
-        $form = $app['form.factory']->createBuilder('form', $app['swiftmailer.options'])
-            ->add('host', 'text', array(
+        $form = $app['form.factory']->createBuilder(Type\FormType::class, $app['swiftmailer.options'])
+            ->add('host', Type\TextType::class, array(
                 'label' => 'Host'
             ))
-            ->add('port', 'text', array(
+            ->add('port', Type\TextType::class, array(
                 'label' => 'Port'
             ))
-            ->add('username', 'text', array(
+            ->add('username', Type\TextType::class, array(
                 'label' => 'Username'
             ))
-            ->add('password', 'password', array(
+            ->add('password', Type\PasswordType::class, array(
                 'label' => 'Password'
             ))
-            ->add('encryption', 'text', array(
+            ->add('encryption', Type\TextType::class, array(
                 'required' => false,
                 'label' => 'Encryption'
             ))
-            ->add('auth_mode', 'text', array(
+            ->add('auth_mode', Type\TextType::class, array(
                 'required' => false,
                 'label' => 'Authentication mode'
             ))

@@ -29,6 +29,8 @@ class Application
     protected $app;
     /** @var array $appConfig */
     protected $appConfig = array();
+    /** @var array $config */
+    protected $config = array();
     /** @var Application $instance */
     protected static $instance;
 
@@ -63,8 +65,8 @@ class Application
         $this->setApp(new \Silex\Application());
         $this->app['debug'] = $this->appConfig['debug'];
 
-        $this->registerServices();
         $this->createConfig();
+        $this->registerServices();
 
         /** @TODO: Adds routing */
         /*// load the routes
@@ -99,7 +101,7 @@ class Application
     {
         $this->app->register(new FormServiceProvider());
         $this->app->register(new ValidatorServiceProvider());
-        $this->app->register(new SwiftmailerServiceProvider());
+        $this->app->register(new SwiftmailerServiceProvider(), $this->getConfig()['app']);
         $this->app->register(new UrlGeneratorServiceProvider());
         $this->app->register(new SessionServiceProvider());
         $this->app->register(new ServiceControllerServiceProvider());
@@ -151,6 +153,8 @@ class Application
         $yaml = new Parser();
         $config = $yaml->parse($config);
 
+        $this->setConfig($config);
+
         // check configurations
         if (!isset($config['app'])) {
             throw new \Exception('Configuration file doesn\'t exist!');
@@ -171,6 +175,22 @@ class Application
 
             return $this->app;
         });
+    }
+
+    /**
+     * @return array
+     */
+    public function getConfig()
+    {
+        return $this->config;
+    }
+
+    /**
+     * @param array $config
+     */
+    public function setConfig($config)
+    {
+        $this->config = $config;
     }
 
     /**

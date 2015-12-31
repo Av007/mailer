@@ -4,6 +4,7 @@ namespace Mailer\Controllers;
 
 use Mailer\Application;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Form\Extension\Core\Type;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -31,12 +32,12 @@ class DefaultController
 
         // create form
         $result = false; // send flag
-        $formMail = $app['form.factory']->createBuilder('form')
-            ->add('send_to', 'text', array(
+        $formMail = $app['form.factory']->createBuilder(Type\FormType::class)
+            ->add('send_to', Type\TextType::class, array(
                 'required' => true,
                 'label' => 'Send to'
             ))
-            ->add('content', 'textarea', array(
+            ->add('content', Type\TextareaType::class, array(
                 'required' => true,
                 'label' => 'Content'
             ))
