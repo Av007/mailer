@@ -5,6 +5,7 @@ namespace Mailer\Service;
 
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Validator\RecursiveValidator;
 
 /**
  * Class Utils
@@ -17,10 +18,10 @@ class Utils
     /**
      * @param array $parameters
      * @param array $errors
-     * @param \Symfony\Component\Validator\Validator\RecursiveValidator $validator
+     * @param RecursiveValidator|null $validator
      * @return array|null|string
      */
-    public function sendToParam($parameters, &$errors, $validator)
+    public function sendToParam($parameters, &$errors, $validator = null)
     {
         $errors = array();
         $resolver = new OptionsResolver();
@@ -43,7 +44,7 @@ class Utils
     }
 
     /**
-     * @param $mailer
+     * @param \Swift_Mailer $mailer
      * @param string|array $sendTo
      * @param string $content
      */

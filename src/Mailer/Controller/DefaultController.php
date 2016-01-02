@@ -7,8 +7,6 @@ use Mailer\Entity;
 use Mailer\Form;
 use Mailer\Service;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Form\Extension\Core\Type;
-use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Class DefaultController

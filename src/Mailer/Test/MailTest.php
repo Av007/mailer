@@ -21,8 +21,7 @@ class Test extends WebTestCase
      */
     public function createApplication()
     {
-        $application = Application::getInstance();
-        $app = $application->getApp();
+        $app = Application::getInstance()->getApp();
 
         $app['mailer.logger'] = new \Swift_Plugins_MessageLogger();
         $app['mailer']->registerPlugin($app['mailer.logger']);
@@ -70,7 +69,7 @@ class Test extends WebTestCase
             ->setSubject('Test email')
             ->setFrom('test@test.com')
             ->setContentType("text/html")
-            ->setTo('v.avdeev@optimum-web.com')
+            ->setTo('test@optimum-web.com')
             ->setBody('Test!','text/html');
 
         $result = $this->app['mailer']->send($message);
