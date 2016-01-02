@@ -18,10 +18,10 @@ class Utils
     /**
      * @param array $parameters
      * @param array $errors
-     * @param RecursiveValidator|null $validator
+     * @param RecursiveValidator $validator
      * @return array|null|string
      */
-    public function sendToParam($parameters, &$errors, $validator = null)
+    public function sendToParam($parameters, &$errors, RecursiveValidator $validator = null)
     {
         $errors = array();
         $resolver = new OptionsResolver();
@@ -48,7 +48,7 @@ class Utils
      * @param string|array $sendTo
      * @param string $content
      */
-    public function sendMail($mailer, $sendTo, $content)
+    public function sendMail(\Swift_Mailer $mailer, $sendTo, $content)
     {
         $mailer->send(\Swift_Message::newInstance()
             ->setSubject('Test email')
