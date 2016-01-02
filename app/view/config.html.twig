@@ -1,9 +1,11 @@
 {% extends 'base.html.twig' %}
 {% block title %} | Configuration{% endblock %}
 
-{%  block content %}
+{%  block header %}
     <h1>{{ 'config_mail'|trans }}</h1>
+{% endblock %}
 
+{%  block content %}
     {% if errors %}
         <div class="errors">
             <h3><i></i>{{ 'user_errors'|trans }}</h3>

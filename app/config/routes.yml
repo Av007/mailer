@@ -1,0 +1,12 @@
+# routes.yml
+home:
+    path:  /
+    defaults: { _controller: 'default.controller:indexAction' }
+
+config:
+    path:   /config
+    defaults:  { _controller: 'default.controller:configAction' }
+
+lang:
+    path:   /lang
+    defaults:  { _controller: 'default.controller:langAction' }

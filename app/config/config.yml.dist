@@ -1,6 +1,10 @@
 # project config
 app:
   debug: true
+
+  default_language: en
+  languages: [en, ru]
+
   swiftmailer.options:
     host:
     port:

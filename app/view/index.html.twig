@@ -1,8 +1,10 @@
 {% extends 'base.html.twig' %}
 
-{%  block content %}
+{%  block header %}
     <h1>{{ 'send_mail'|trans }}</h1>
+{% endblock %}
 
+{%  block content %}
     {% if errors|length > 0 %}
         <div class="errors">
             <h3><i></i>{{ 'user_errors'|trans }}</h3>
@@ -12,10 +14,6 @@
                 {% endfor %}
             </ul>
         </div>
-    {% else %}
-        {#<div class="blue">
-            <p>{{ 'message_sent'|trans }}</p>
-        </div>#}
     {% endif %}
 
     <div class="comment">

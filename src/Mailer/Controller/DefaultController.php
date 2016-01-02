@@ -45,6 +45,7 @@ class DefaultController
 
                 if (count($errors) == 0) {
                     $utils->sendMail($app['mailer'], $sendTo, $data['content']);
+                    $app['session']->getFlashBag()->add('success', 'message_sent');
 
                     return $app->redirect($app['url_generator']->generate('home'));
                 }

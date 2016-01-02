@@ -5,8 +5,7 @@ namespace Mailer\Service;
 
 use Mailer\Application;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Yaml\Dumper;
-use Symfony\Component\Yaml\Parser;
+use Symfony\Component\Yaml\Yaml;
 
 /**
  * Class Config
@@ -52,7 +51,6 @@ class Config
         $resolver->setDefaults(array(
            'lang' => 'en'
         ));
-
         $data = $resolver->resolve($data);
 
         /**
@@ -75,14 +73,11 @@ class Config
     }
 
     /**
-     * @return mixed
+     * @return array
      */
     public function read()
     {
-        // read config file
-        $yml = new Parser();
-        /** @var array $config */
-        return $yml->parse(file_get_contents($this->configFile));
+        return Yaml::parse(file_get_contents($this->configFile));
     }
 
     /**
@@ -90,16 +85,18 @@ class Config
      */
     public function write($data)
     {
-        $dumper = new Dumper();
-        file_put_contents($this->configFile, $dumper->dump($data));
+        file_put_contents($this->configFile, Yaml::dump($data));
     }
 
+    /**
+     * @return bool
+     * @throws \Exception
+     */
     public function hasError()
     {
         // run and load phpunit test
-        $output = shell_exec('cd '.MAIN_PATH . '&& phpunit --log-junit ' . $this->testFile . ' -c app/');
-
-        // log tests
+        // log tests output
+        shell_exec('cd ' . MAIN_PATH . '&& ' . MAIN_PATH . 'vendor/bin/phpunit --log-junit ' . $this->testFile . ' -c app/');
 
         $xml = null;
         if (file_exists($this->testFile) && file_get_contents($this->testFile)) {

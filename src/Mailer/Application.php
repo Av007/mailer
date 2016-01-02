@@ -3,19 +3,11 @@
 
 namespace Mailer;
 
-use Mailer\Controller\ConfigurationController;
 use Mailer\Controller\DefaultController;
-use Mailer\Controller\LanguageController;
-use Silex\Provider\FormServiceProvider;
-use Silex\Provider\ServiceControllerServiceProvider;
-use Silex\Provider\TranslationServiceProvider;
-use Silex\Provider\TwigServiceProvider;
-use Silex\Provider\SwiftmailerServiceProvider;
-use Silex\Provider\UrlGeneratorServiceProvider;
-use Silex\Provider\ValidatorServiceProvider;
-use Silex\Provider\SessionServiceProvider;
+use Silex\Provider;
 use Symfony\Component\Yaml\Parser;
 use Symfony\Component\Translation\Loader\YamlFileLoader;
+use Symfony\Component\Yaml\Yaml;
 
 /**
  * Class Bootstrap
@@ -65,27 +57,9 @@ class Application
         $this->setApp(new \Silex\Application());
         $this->app['debug'] = $this->appConfig['debug'];
 
-        $this->createConfig();
+        $this->initConfig();
+        $this->initRoute();
         $this->registerServices();
-
-        /** @TODO: Adds routing */
-        /*// load the routes
-        $app -> register (new ConfigServiceProvider(MAIN_PATH . "/../config/routes.yml"));
-        foreach ($app["config.routes"] as $name => $route) {
-            $app -> match($route["pattern"], $route["defaults"]["_controller"]) -> bind($name) -> method(isset($route["method"]) ? $route["method"] : "GET");
-        }*/
-
-        $this->app['default.controller'] = $this->app->share(function() {
-            return new DefaultController();
-        });
-        $this->app->get('/', "default.controller:indexAction");
-        $this->app->match('/')->bind('home');
-
-        $this->app->get('/config', "default.controller:configAction");
-        $this->app->match('/config')->bind('config');
-
-        $this->app->get('/lang', "default.controller:langAction");
-        $this->app->match('/lang')->bind('lang');
     }
 
     /**
@@ -93,21 +67,21 @@ class Application
      */
     protected function registerServices()
     {
-        $this->app->register(new FormServiceProvider());
-        $this->app->register(new ValidatorServiceProvider(), array(
+        $this->app->register(new Provider\FormServiceProvider());
+        $this->app->register(new Provider\ValidatorServiceProvider(), array(
             'validator.validator_service_ids' => array(
                 'validator.config' => 'validator.config',
             )
         ));
-        $this->app->register(new SwiftmailerServiceProvider(), $this->getConfig()['app']);
-        $this->app->register(new UrlGeneratorServiceProvider());
-        $this->app->register(new SessionServiceProvider());
-        $this->app->register(new ServiceControllerServiceProvider());
-        $this->app->register(new TwigServiceProvider(), array(
+        $this->app->register(new Provider\SwiftmailerServiceProvider(), $this->getConfig()['app']);
+        $this->app->register(new Provider\UrlGeneratorServiceProvider());
+        $this->app->register(new Provider\SessionServiceProvider());
+        $this->app->register(new Provider\ServiceControllerServiceProvider());
+        $this->app->register(new Provider\TwigServiceProvider(), array(
             'twig.path'    => array($this->appConfig['directories']['view']),
             'twig.options' => array($this->appConfig['directories']['cache']),
         ));
-        $this->app->register(new TranslationServiceProvider(), array(
+        $this->app->register(new Provider\TranslationServiceProvider(), array(
             'locale_fallback' => $this->appConfig['locale']['default'],
         ));
 
@@ -123,13 +97,28 @@ class Application
     }
 
     /**
+     * Init route
+     */
+    protected function initRoute()
+    {
+        $this->app['default.controller'] = $this->app->share(function() {
+            return new DefaultController();
+        });
+
+        $routies = Yaml::parse(file_get_contents($this->appConfig['directories']['config'] . '/routes.yml'));
+        foreach ($routies as $name => $route) {
+            $method = isset($route['method']) ? $route['method'] : 'GET';
+            $this->app->match($route['path'], $route['defaults']['_controller'])->bind($name)->method($method);
+        }
+    }
+
+    /**
      * Create config file
      *
      * @throws \Exception
      */
-    protected function createConfig()
+    protected function initConfig()
     {
-        //$app->register(new DerAlex\Silex\YamlConfigServiceProvider(__DIR__ . '/../src/Resources/config/settings.yml'));
         // create config file
         $default = file_get_contents($this->appConfig['directories']['config'] . '/config.yml.dist');
         $configFile = $this->appConfig['directories']['config'] . '/config.yml';
