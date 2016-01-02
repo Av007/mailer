@@ -4,7 +4,11 @@ app/phpunit.xml
 app/logs/*
 app/cache/*
 
-app/reports/testsuites.xml
+app/report/testsuites.xml
 
 /vendor/
 composer.phar
+
+# Frontend
+web/bower_components
+web/node_modules

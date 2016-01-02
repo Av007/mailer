@@ -12,7 +12,7 @@
         >
     <testsuites>
         <testsuite name="Application Test Suite">
-            <directory>../src/Mailer/Tests</directory>
+            <directory>../src/Mailer/Test</directory>
         </testsuite>
     </testsuites>
     <phpunitreport infile="../../app/reports/testsuites.xml"

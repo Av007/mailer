@@ -3,9 +3,9 @@
 
 namespace Mailer;
 
-use Mailer\Controllers\ConfigurationController;
-use Mailer\Controllers\DefaultController;
-use Mailer\Controllers\LanguageController;
+use Mailer\Controller\ConfigurationController;
+use Mailer\Controller\DefaultController;
+use Mailer\Controller\LanguageController;
 use Silex\Provider\FormServiceProvider;
 use Silex\Provider\ServiceControllerServiceProvider;
 use Silex\Provider\TranslationServiceProvider;
@@ -52,14 +52,14 @@ class Application
         $this->setAppConfig(array(
             'debug'       => true,
             'directories' => array(
-                'view'    => __DIR__ . '/Views',
-                'cache'   => __DIR__ . '/../../app/cache/twig',
-                'config'  => __DIR__ . '/../../app/config',
-                'reports' => __DIR__ . '/../../app/reports/',
+                'view'    => MAIN_PATH . 'app/view',
+                'cache'   => MAIN_PATH . 'app/cache/twig',
+                'config'  => MAIN_PATH . 'app/config',
+                'reports' => MAIN_PATH . 'app/report/',
             ),
             'locale'      => array(
                 'default'   => 'en',
-                'directory' => __DIR__ . '/../../app/locales/',
+                'directory' => MAIN_PATH . 'app/locales/',
             ),
         ));
         $this->setApp(new \Silex\Application());
@@ -70,7 +70,7 @@ class Application
 
         /** @TODO: Adds routing */
         /*// load the routes
-        $app -> register (new ConfigServiceProvider(__DIR__ . "/../config/routes.yml"));
+        $app -> register (new ConfigServiceProvider(MAIN_PATH . "/../config/routes.yml"));
         foreach ($app["config.routes"] as $name => $route) {
             $app -> match($route["pattern"], $route["defaults"]["_controller"]) -> bind($name) -> method(isset($route["method"]) ? $route["method"] : "GET");
         }*/
@@ -81,17 +81,11 @@ class Application
         $this->app->get('/', "default.controller:indexAction");
         $this->app->match('/')->bind('home');
 
-        $this->app['language.controller'] = $this->app->share(function() {
-            return new LanguageController();
-        });
-        $this->app->get('/lang', "language.controller:indexAction");
-        $this->app->match('/lang')->bind('lang');
-
-        $this->app['configuration.controller'] = $this->app->share(function() {
-            return new ConfigurationController();
-        });
-        $this->app->get('/config', "configuration.controller:indexAction");
+        $this->app->get('/config', "default.controller:configAction");
         $this->app->match('/config')->bind('config');
+
+        $this->app->get('/lang', "default.controller:langAction");
+        $this->app->match('/lang')->bind('lang');
     }
 
     /**
@@ -100,7 +94,11 @@ class Application
     protected function registerServices()
     {
         $this->app->register(new FormServiceProvider());
-        $this->app->register(new ValidatorServiceProvider());
+        $this->app->register(new ValidatorServiceProvider(), array(
+            'validator.validator_service_ids' => array(
+                'validator.config' => 'validator.config',
+            )
+        ));
         $this->app->register(new SwiftmailerServiceProvider(), $this->getConfig()['app']);
         $this->app->register(new UrlGeneratorServiceProvider());
         $this->app->register(new SessionServiceProvider());
@@ -131,6 +129,7 @@ class Application
      */
     protected function createConfig()
     {
+        //$app->register(new DerAlex\Silex\YamlConfigServiceProvider(__DIR__ . '/../src/Resources/config/settings.yml'));
         // create config file
         $default = file_get_contents($this->appConfig['directories']['config'] . '/config.yml.dist');
         $configFile = $this->appConfig['directories']['config'] . '/config.yml';

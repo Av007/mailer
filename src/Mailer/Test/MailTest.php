@@ -1,6 +1,6 @@
 <?php
 
-namespace Mailer\Tests;
+namespace Mailer\Test;
 
 use Mailer\Application;
 use Silex\WebTestCase;

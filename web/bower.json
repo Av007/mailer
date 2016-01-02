@@ -1,0 +1,26 @@
+{
+  "name": "mailer",
+  "homepage": "https://github.com/Av007/mailer",
+  "authors": [
+    "Avdeev Vladimir <vladimir@speakaboos.com>"
+  ],
+  "description": "sends html emails",
+  "main": "",
+  "moduleType": [
+    "globals"
+  ],
+  "keywords": [
+    "email",
+    "mail",
+    "send"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

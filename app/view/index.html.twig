@@ -3,7 +3,7 @@
 {%  block content %}
     <h1>{{ 'send_mail'|trans }}</h1>
 
-    {% if errors is defined and errors > 0 %}
+    {% if errors|length > 0 %}
         <div class="errors">
             <h3><i></i>{{ 'user_errors'|trans }}</h3>
             <ul>
@@ -12,13 +12,12 @@
                 {% endfor %}
             </ul>
         </div>
+    {% else %}
+        {#<div class="blue">
+            <p>{{ 'message_sent'|trans }}</p>
+        </div>#}
     {% endif %}
 
-    {% if (success) %}
-        <div class="blue">
-            <p>{{ 'message_sent'|trans }}</p>
-        </div>
-    {% endif %}
     <div class="comment">
         <div class="content margin">
             <pre>{{ 'tip'|trans }}</pre>
