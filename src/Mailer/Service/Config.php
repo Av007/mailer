@@ -5,7 +5,6 @@ namespace Mailer\Service;
 
 use Mailer\Application;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Yaml\Yaml;
 
 /**
  * Class Config
@@ -13,9 +12,10 @@ use Symfony\Component\Yaml\Yaml;
  * @package Mailer\Service
  * @author Vladimir Avdeev <avdeevvladimir@gmail.com>
  */
-class Config
+class Config extends Utils
 {
     const FILE_NAME = '/config.yml';
+    const TEMP_NAME = '/config.yml.dist';
     const TEST_NAME = 'testsuites.xml';
 
     /** @var Application $application */
@@ -65,7 +65,7 @@ class Config
 
         // setup language
         $config['app']['lang'] = $data['lang'];
-        $this->application['locale_fallback'] = $data['lang'];
+        $this->application->getApp()['locale_fallback'] = $data['lang'];
 
         $this->write($config);
 
@@ -73,19 +73,29 @@ class Config
     }
 
     /**
+     * @param string|null $file
      * @return array
      */
-    public function read()
+    public function read($file = null)
     {
-        return Yaml::parse(file_get_contents($this->configFile));
+        if (!$file) {
+            $file = $this->configFile;
+        }
+
+        return $this->read($file);
     }
 
     /**
+     * @param string|null $file
      * @param array $data
      */
-    public function write($data)
+    public function write($data, $file = null)
     {
-        file_put_contents($this->configFile, Yaml::dump($data));
+        if (!$file) {
+            $file = $this->configFile;
+        }
+
+        $this->write($data, $file);
     }
 
     /**

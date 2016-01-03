@@ -5,7 +5,7 @@ app:
   default_language: en
   languages: [en, ru]
 
-  swiftmailer.options:
+  email:
     host:
     port:
     username:

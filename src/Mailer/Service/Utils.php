@@ -6,6 +6,7 @@ namespace Mailer\Service;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Validator\RecursiveValidator;
+use Symfony\Component\Yaml\Yaml;
 
 /**
  * Class Utils
@@ -15,6 +16,35 @@ use Symfony\Component\Validator\Validator\RecursiveValidator;
  */
 class Utils
 {
+    /**
+     * @param string $file
+     * @return array
+     */
+    public function read($file)
+    {
+        return Yaml::parse(file_get_contents($file));
+    }
+
+    /**
+     * @param array $data
+     * @param string $file
+     */
+    public function write($data, $file)
+    {
+        file_put_contents($file, Yaml::dump($data));
+    }
+
+    /**
+     * @param string $file
+     */
+    public function check($file)
+    {
+        if (!file_exists($file)) {
+            touch($file);
+            chmod($file, 0777);
+        }
+    }
+
     /**
      * @param array $parameters
      * @param array $errors
