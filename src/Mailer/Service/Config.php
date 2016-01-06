@@ -4,7 +4,6 @@
 namespace Mailer\Service;
 
 use Mailer\Application;
-use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * Class Config
@@ -31,29 +30,6 @@ class Config extends Utils
         $config = $this->application->getAppConfig();
         $this->configFile = $config['directories']['config'] . self::FILE_NAME;
         $this->testFile = $config['directories']['reports'] . self::TEST_NAME;
-    }
-
-    /**
-     * @param array $data
-     * @return array
-     */
-    public function modify($data)
-    {
-        $resolver = new OptionsResolver();
-
-        foreach ($data as $key => $parameter) {
-            if (!$resolver->hasDefault($key)) {
-                unset($data[$key]);
-            };
-        }
-
-        $resolver->setDefaults(array(
-           'lang' => 'en'
-        ));
-        $data = $resolver->resolve($data);
-
-        // setup language
-        $this->application->getApp()['locale_fallback'] = $data['lang'];
     }
 
     /**

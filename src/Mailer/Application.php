@@ -100,6 +100,7 @@ class Application extends Utils
             $translator->addLoader('yaml', new YamlFileLoader());
             $translator->addResource('yaml', $this->appConfig['directories']['locales'] . 'en.yml', 'en');
             $translator->addResource('yaml', $this->appConfig['directories']['locales'] . 'ru.yml', 'ru');
+            $translator->addResource('yaml', $this->appConfig['directories']['locales'] . 'ru.yml', 'ru', 'validators');
 
             return $translator;
         }));
@@ -195,6 +196,22 @@ class Application extends Utils
     public function setConfig($config)
     {
         $this->config = $config;
+    }
+
+    /**
+     * @param string $key
+     * @param mixed $value
+     * @param boolean $store
+     */
+    public function setConfigKey($key, $value, $store = false)
+    {
+        if (array_key_exists($key, $this->config)) {
+            $this->config[$key] = $value;
+        }
+
+        if ($store) {
+            $this->getSession()->set('configInit', $this->config);
+        }
     }
 
     /**

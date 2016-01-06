@@ -72,7 +72,7 @@ class Utils
         }
 
         // you may want to require the cached code:
-        return require $cacheFile;
+        return require($cacheFile);
     }
 
     /**

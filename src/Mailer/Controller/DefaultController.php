@@ -61,17 +61,16 @@ class DefaultController
      */
     public function langAction(Request $request)
     {
-        $app = Application::getInstance()->getApp();
-        $configService = new Service\Config();
+        $application = Application::getInstance();
+        $app = $application->getApp();
 
         /** @var \Symfony\Component\Form\Form $form */
         $form = Form\LangType::getInstance($app['form.factory'], array('lang' => $app['session.default_locale']))->build();
 
-        if ('POST' == $request->getMethod()) {
+        if ($request->isMethod('POST')) {
             $form->handleRequest($request);
             if ($form->isValid()) {
-                $configService->modify($form->getData());
-                $app['session']->set('language', $form->getData()['lang']);
+                $application->setConfigKey('default_language', $form->get('lang')->getData(), true);
 
                 return $app->redirect($app['url_generator']->generate('home'));
             }
@@ -87,16 +86,16 @@ class DefaultController
      */
     public function configAction(Request $request)
     {
-        $app = Application::getInstance()->getApp();
-        $configService = new Service\Config();
-        $config = $app['swiftmailer.options'];
+        $application = Application::getInstance();
+        $app = $application->getApp();
+        $config = $application->getConfig('email');
 
         $form = Form\ConfigType::getInstance($app['form.factory'], $config)->build();
 
-        if ('POST' == $request->getMethod()) {
+        if ($request->isMethod('POST')) {
             $form->handleRequest($request);
             if ($form->isValid()) {
-                $config = $configService->modify($form->getData());
+                $config = $form->getData();
             }
         }
 
@@ -105,8 +104,9 @@ class DefaultController
         $errors = $app['validator']->validate(new Entity\Config($config));
 
         // success
+        $app['session']->set('config', count($errors) == 0);
         if (count($errors) == 0) {
-            $app['session']->set('config', true);
+            $application->setConfigKey('email', $config, true);
             return $app->redirect($app['url_generator']->generate('home'));
         }
 
