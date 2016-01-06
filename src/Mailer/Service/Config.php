@@ -37,9 +37,8 @@ class Config extends Utils
      * @param array $data
      * @return array
      */
-    public function populate($data)
+    public function modify($data)
     {
-        $config = $this->read();
         $resolver = new OptionsResolver();
 
         foreach ($data as $key => $parameter) {
@@ -53,23 +52,8 @@ class Config extends Utils
         ));
         $data = $resolver->resolve($data);
 
-        /**
-         * @var string $key
-         * @var string $item
-         */
-        foreach ($data as $key => $item) {
-            if (array_key_exists($key, $config['app']['swiftmailer.options'])) {
-                $config['app']['swiftmailer.options'][$key] = $item;
-            }
-        }
-
         // setup language
-        $config['app']['lang'] = $data['lang'];
         $this->application->getApp()['locale_fallback'] = $data['lang'];
-
-        $this->write($config);
-
-        return $config;
     }
 
     /**
@@ -82,7 +66,7 @@ class Config extends Utils
             $file = $this->configFile;
         }
 
-        return $this->read($file);
+        return $this->readFile($file);
     }
 
     /**
@@ -95,7 +79,7 @@ class Config extends Utils
             $file = $this->configFile;
         }
 
-        $this->write($data, $file);
+        $this->writeFile($data, $file);
     }
 
     /**

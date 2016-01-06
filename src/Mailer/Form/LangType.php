@@ -35,8 +35,8 @@ class LangType
             ->add('lang', Type\ChoiceType::class, array(
                 'required' => false,
                 'choices' => array(
-                    'en' => 'English',
-                    'ru' => 'Русский'
+                    'English' => 'en',
+                    'Русский' => 'ru'
                 ),
                 'placeholder' => 'default'
             ))
@@ -50,7 +50,7 @@ class LangType
      * @param array $data
      * @return ConfigType
      */
-    public static function getInstance($formFactory, $data)
+    public static function getInstance($formFactory, $data = null)
     {
         if (self::$instance === null) {
             self::$instance = new self($formFactory, $data);

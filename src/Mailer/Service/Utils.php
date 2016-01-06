@@ -3,6 +3,7 @@
 
 namespace Mailer\Service;
 
+use Symfony\Component\Config\ConfigCache;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Validator\RecursiveValidator;
@@ -20,7 +21,7 @@ class Utils
      * @param string $file
      * @return array
      */
-    public function read($file)
+    public function readFile($file)
     {
         return Yaml::parse(file_get_contents($file));
     }
@@ -29,7 +30,7 @@ class Utils
      * @param array $data
      * @param string $file
      */
-    public function write($data, $file)
+    public function writeFile($data, $file)
     {
         file_put_contents($file, Yaml::dump($data));
     }
@@ -43,6 +44,35 @@ class Utils
             touch($file);
             chmod($file, 0777);
         }
+    }
+
+    /**
+     * @param string $file
+     * @param string $cacheDir
+     * @param boolean $debug
+     * @return array
+     */
+    function cache($file, $cacheDir, $debug = false)
+    {
+        $fileInfo = new \SplFileInfo($file);
+        $cacheFile = $cacheDir . '/' . $fileInfo->getBasename($fileInfo->getExtension()) . '.php';
+
+        // the second argument indicates whether or not you want to use debug mode
+        $userMatcherCache = new ConfigCache($cacheFile, $debug);
+        if (!$userMatcherCache->isFresh()) {
+
+            $data = Yaml::parse(file_get_contents($fileInfo));
+            if (!$data) {
+                throw new \LogicException('No data');
+            }
+            // the code for the UserMatcher is generated elsewhere
+            $code = sprintf('<?php return %s;', var_export($data, true));
+
+            $userMatcherCache->write($code);
+        }
+
+        // you may want to require the cached code:
+        return require $cacheFile;
     }
 
     /**

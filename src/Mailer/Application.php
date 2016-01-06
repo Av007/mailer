@@ -7,9 +7,9 @@ use Mailer\Controller\DefaultController;
 use Mailer\Service\Config;
 use Mailer\Service\Utils;
 use Silex\Provider;
+use Symfony\Component\Form\Exception\LogicException;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Translation\Loader\YamlFileLoader;
-use Symfony\Component\Yaml\Yaml;
 
 /**
  * Class Bootstrap
@@ -46,13 +46,16 @@ class Application extends Utils
         $this->setAppConfig(array(
             'directories' => array(
                 'view'    => MAIN_PATH . 'app/view',
-                'cache'   => MAIN_PATH . 'app/cache/twig',
+                'cache'   => MAIN_PATH . 'app/cache',
                 'config'  => MAIN_PATH . 'app/config',
                 'reports' => MAIN_PATH . 'app/report/',
                 'locales' => MAIN_PATH . 'app/locales/',
             ),
         ));
-        $this->setApp(new \Silex\Application());
+        $this->setApp(new \Silex\Application(array(
+            'debug' => $this->getConfig('debug')
+        )));
+        $this->app->register(new Provider\SessionServiceProvider());
 
         $this->initConfig();
         $this->initRoute();
@@ -64,7 +67,6 @@ class Application extends Utils
      */
     protected function registerServices()
     {
-        $this->app['debug'] = $this->getConfig('debug');
         $this->app->register(new Provider\TranslationServiceProvider(), array(
             'locale_fallback' => $this->getConfig('default_language'),
         ));
@@ -78,11 +80,12 @@ class Application extends Utils
             'swiftmailer.options' => $this->getConfig('email')
         ));
         $this->app->register(new Provider\UrlGeneratorServiceProvider());
-        $this->app->register(new Provider\SessionServiceProvider());
         $this->app->register(new Provider\ServiceControllerServiceProvider());
         $this->app->register(new Provider\TwigServiceProvider(), array(
             'twig.path'    => array($this->appConfig['directories']['view']),
-            'twig.options' => array($this->appConfig['directories']['cache']),
+            'twig.options' => array(
+                'cache' => $this->appConfig['directories']['cache'] . '/twig'
+            ),
         ));
 
         // apply localization
@@ -111,7 +114,7 @@ class Application extends Utils
             return new DefaultController();
         });
 
-        $routies = Yaml::parse(file_get_contents($this->appConfig['directories']['config'] . '/routes.yml'));
+        $routies = $this->readConfig($this->appConfig['directories']['config'] . '/routes.yml');
         foreach ($routies as $name => $route) {
             if (isset($route['method'])) {
                 $this->app->match($route['path'], $route['defaults']['_controller'])
@@ -131,17 +134,27 @@ class Application extends Utils
      */
     protected function initConfig()
     {
+        $session = $this->getSession();
+        if ($session->get('configInit')) {
+            $this->setConfig($session->get('configInit'));
+            return;
+        }
         // create config file
-        $default = $this->read($this->appConfig['directories']['config'] . Config::TEMP_NAME);
         $configFile = $this->appConfig['directories']['config'] . Config::FILE_NAME;
 
         // create file
         $this->check($configFile);
         // read config file
-        $config = $this->read($configFile);
+        try {
+            $config = $this->readConfig($configFile);
+        } catch (LogicException $e) {
+            $config = $this->readFile($configFile);
+        }
+
         // put defaults
         if (!$config) {
-            $this->write($default, $configFile);
+            $default = $this->readFile($this->appConfig['directories']['config'] . Config::TEMP_NAME);
+            $this->writeFile($default, $configFile);
             $config = $default;
         }
 
@@ -158,6 +171,8 @@ class Application extends Utils
             throw new \Exception('Configuration file doesn\'t exist!');
         }
         $data = $resolver->resolve($config['app']);
+
+        $session->set('configInit', $data);
         $this->setConfig($data);
     }
 
@@ -212,6 +227,27 @@ class Application extends Utils
     public function setAppConfig($appConfig)
     {
         $this->appConfig = $appConfig;
+    }
+
+    /**
+     * @param string $file
+     * @return array
+     */
+    protected function readConfig($file)
+    {
+        return $this->cache(
+            $file,
+            $this->appConfig['directories']['cache'] . '/config',
+            $this->getConfig('debug')
+        );
+    }
+
+    /**
+     * @return \Symfony\Component\HttpFoundation\Session\Session
+     */
+    protected function getSession()
+    {
+        return $this->app['session'];
     }
 
     /**

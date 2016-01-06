@@ -65,12 +65,13 @@ class DefaultController
         $configService = new Service\Config();
 
         /** @var \Symfony\Component\Form\Form $form */
-        $form = Form\LangType::getInstance($app['form.factory'], $app['swiftmailer.options'])->build();
+        $form = Form\LangType::getInstance($app['form.factory'], array('lang' => $app['session.default_locale']))->build();
 
         if ('POST' == $request->getMethod()) {
             $form->handleRequest($request);
             if ($form->isValid()) {
-                $configService->populate($form->getData());
+                $configService->modify($form->getData());
+                $app['session']->set('language', $form->getData()['lang']);
 
                 return $app->redirect($app['url_generator']->generate('home'));
             }
@@ -95,7 +96,7 @@ class DefaultController
         if ('POST' == $request->getMethod()) {
             $form->handleRequest($request);
             if ($form->isValid()) {
-                $config = $configService->populate($form->getData());
+                $config = $configService->modify($form->getData());
             }
         }
 
