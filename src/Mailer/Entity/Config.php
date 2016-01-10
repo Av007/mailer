@@ -3,8 +3,10 @@
 
 namespace Mailer\Entity;
 
+use Mailer\Application;
+use Mailer\Service\Utils;
 use Mailer\Validator\Constraints\ContainsConfig;
-use Symfony\Component\OptionsResolver\OptionsResolver;
+use Mailer\Validator\Constraints\ContainsConfigValidator as ConfigValidator;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Mapping\ClassMetadata;
 
@@ -16,7 +18,7 @@ use Symfony\Component\Validator\Mapping\ClassMetadata;
  * @package Mailer\Entity
  * @author Vladimir Avdeev <avdeevvladimir@gmail.com>
  */
-class Config
+class Config extends Utils
 {
     /** @var string $host */
     protected $host;
@@ -39,32 +41,30 @@ class Config
     public function __construct($parameters)
     {
         if ($parameters) {
-            $resolver = new OptionsResolver();
-            $resolver->setDefaults(array(
-                'host'       => null,
-                'port'       => null,
-                'username'   => null,
-                'password'   => null,
-                'encryption' => null,
-                'auth_mode'  => null,
+            $data = $this->setDefaults($parameters, array(
+                'email'            => null,
+                'default_language' => 'en',
             ));
 
-            foreach ($parameters as $key => $parameter) {
-                if (!$resolver->hasDefault($key)) {
-                    unset($parameters[$key]);
-                };
+            if ($data['email']) {
+                $emailConfig = $this->setDefaults($data['email'], array(
+                    'host'       => null,
+                    'port'       => null,
+                    'username'   => null,
+                    'password'   => null,
+                    'encryption' => null,
+                    'auth_mode'  => null,
+                ));
+
+                $this->host       = $emailConfig['host'];
+                $this->port       = $emailConfig['port'];
+                $this->username   = $emailConfig['username'];
+                $this->password   = $emailConfig['password'];
+                $this->encryption = $emailConfig['encryption'];
+                $this->authMode   = $emailConfig['auth_mode'];
             }
 
-            $data = $resolver->resolve($parameters);
-
-            $this->host       = $data['host'];
-            $this->port       = $data['port'];
-            $this->username   = $data['username'];
-            $this->password   = $data['password'];
-            $this->encryption = $data['encryption'];
-            $this->authMode   = $data['auth_mode'];
-
-            $this->lang = 'en';
+            $this->lang = $data['default_language'];
         }
     }
 
@@ -181,14 +181,71 @@ class Config
     }
 
     /**
+     * @return bool
+     * @throws \Exception
+     */
+    public function checkReport()
+    {
+        $config = Application::getInstance()->getAppConfig();
+        $testFile = $config['directories']['reports'] . ConfigValidator::TEST_NAME;
+
+        $xml = null;
+        if (file_exists($testFile) && file_get_contents($testFile)) {
+            $xml = simplexml_load_file($testFile);
+        }
+
+        if(!$xml) {
+            throw (new \Exception('Test is broken!') );
+        }
+
+        return ($xml->testsuite->attributes()->failures != 0) || ($xml->testsuite->attributes()->errors != 0);
+    }
+
+    public function getFileName()
+    {
+        $config = Application::getInstance()->getAppConfig();
+        return $config['directories']['config'] . Application::FILE_NAME;
+    }
+
+    public function save()
+    {
+        $application = Application::getInstance();
+        $config = $application->getAppConfig();
+
+        $this->rewrite($this->getFileName(), $this->toArray(), 'email', $config['directories']['cache'] . '/config');
+        $application->setConfigKey('email', $this->toArray()['email'], true);
+    }
+
+    /**
      * @param ClassMetadata $metadata
      */
     static public function loadValidatorMetadata(ClassMetadata $metadata)
     {
         $metadata->addPropertyConstraint('host', new Assert\NotBlank());
         $metadata->addPropertyConstraint('port', new Assert\NotBlank());
+        $metadata->addPropertyConstraint('port', new Assert\Range(array(
+            'min' => 0,
+            'max' => 9999,
+        )));
         $metadata->addPropertyConstraint('username', new Assert\Length(array('min' => 3)));
         $metadata->addPropertyConstraint('password', new Assert\Length(array('min' => 3)));
         $metadata->addConstraint(new ContainsConfig());
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function toArray()
+    {
+        return array(
+            'email' => array(
+                'host'       => $this->getHost(),
+                'port'       => $this->getPort(),
+                'username'   => $this->getUsername(),
+                'password'   => $this->getPassword(),
+                'encryption' => $this->getEncryption(),
+                'auth_mode'  => $this->getAuthMode(),
+            )
+        );
     }
 }

@@ -4,10 +4,8 @@
 namespace Mailer;
 
 use Mailer\Controller\DefaultController;
-use Mailer\Service\Config;
 use Mailer\Service\Utils;
 use Silex\Provider;
-use Symfony\Component\Form\Exception\LogicException;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Translation\Loader\YamlFileLoader;
 
@@ -19,6 +17,9 @@ use Symfony\Component\Translation\Loader\YamlFileLoader;
  */
 class Application extends Utils
 {
+    const FILE_NAME = '/config.yml';
+    const TEMP_NAME = '/config.yml.dist';
+
     /** @var \Silex\Application $app */
     protected $app;
     /** @var array $appConfig */
@@ -52,9 +53,7 @@ class Application extends Utils
                 'locales' => MAIN_PATH . 'app/locales/',
             ),
         ));
-        $this->setApp(new \Silex\Application(array(
-            'debug' => $this->getConfig('debug')
-        )));
+        $this->setApp(new \Silex\Application());
         $this->app->register(new Provider\SessionServiceProvider());
 
         $this->initConfig();
@@ -67,6 +66,7 @@ class Application extends Utils
      */
     protected function registerServices()
     {
+        $this->app['debug'] = $this->getConfig('debug');
         $this->app->register(new Provider\TranslationServiceProvider(), array(
             'locale_fallback' => $this->getConfig('default_language'),
         ));
@@ -141,22 +141,22 @@ class Application extends Utils
             return;
         }
         // create config file
-        $configFile = $this->appConfig['directories']['config'] . Config::FILE_NAME;
+        $configFile = $this->appConfig['directories']['config'] . self::FILE_NAME;
 
         // create file
         $this->check($configFile);
         // read config file
         try {
             $config = $this->readConfig($configFile);
-        } catch (LogicException $e) {
+        } catch (\LogicException $e) {
             $config = $this->readFile($configFile);
         }
 
         // put defaults
         if (!$config) {
-            $default = $this->readFile($this->appConfig['directories']['config'] . Config::TEMP_NAME);
+            $default = $this->readFile($this->appConfig['directories']['config'] . self::TEMP_NAME);
             $this->writeFile($default, $configFile);
-            $config = $default;
+            $config = $this->readConfig($configFile);
         }
 
         $resolver = new OptionsResolver();

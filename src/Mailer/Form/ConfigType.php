@@ -3,7 +3,14 @@
 namespace Mailer\Form;
 
 use Symfony\Component\Form\Extension\Core\Type;
+use Symfony\Component\Validator\Constraints as Assert;
 
+/**
+ * Class ConfigType
+ *
+ * @package Mailer\Form
+ * @author Vladimir Avdeev
+ */
 class ConfigType
 {
     /** @var \Symfony\Component\Form\Form $formFactory */
@@ -19,9 +26,9 @@ class ConfigType
      */
     public function __construct($formFactory, $data)
     {
+        $this->data        = $data['email'];
+        self::$instance    = $this;
         $this->formFactory = $formFactory;
-        $this->data = $data;
-        self::$instance = $this;
     }
 
     /**
@@ -33,10 +40,10 @@ class ConfigType
     {
         return $this->formFactory->createBuilder(Type\FormType::class, $this->data)
             ->add('host', Type\TextType::class, array(
-                'label' => 'Host'
+                'label' => 'Host',
             ))
             ->add('port', Type\TextType::class, array(
-                'label' => 'Port'
+                'label' => 'Port',
             ))
             ->add('username', Type\TextType::class, array(
                 'label' => 'Username'
@@ -44,13 +51,29 @@ class ConfigType
             ->add('password', Type\PasswordType::class, array(
                 'label' => 'Password'
             ))
-            ->add('encryption', Type\TextType::class, array(
+            ->add('encryption', Type\ChoiceType::class, array(
                 'required' => false,
-                'label' => 'Encryption'
+                'label'    => 'Encryption',
+                'placeholder' => 'None',
+                'choices'     => array(
+                    'SSL'     => 'ssl',
+                    'TSL'     => 'tsl',
+                    'SSL/TLS' => 'ssl/tls',
+                )
             ))
-            ->add('auth_mode', Type\TextType::class, array(
-                'required' => false,
-                'label' => 'Authentication mode'
+            ->add('auth_mode', Type\ChoiceType::class, array(
+                'required'    => false,
+                'label'       => 'Authentication mode',
+                'placeholder' => 'None',
+                'choices'     => array(
+                    'Login'    => 'login',
+                    'Sendmail' => 'sendmail',
+                )
+            ))
+            ->add('save', Type\SubmitType::class, array(
+                'attr' => array(
+                    'class' => 'button'
+                )
             ))
             ->getForm();
     }

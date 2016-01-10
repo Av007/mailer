@@ -2,12 +2,14 @@
 
 namespace Mailer\Validator\Constraints;
 
-use Mailer\Service\Config;
+use Mailer\Application;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 
 class ContainsConfigValidator extends ConstraintValidator
 {
+    const TEST_NAME = 'testsuites.xml';
+
     /**
      * @param \Mailer\Entity\Config $value
      * @param Constraint $constraint
@@ -15,9 +17,13 @@ class ContainsConfigValidator extends ConstraintValidator
      */
     public function validate($value, Constraint $constraint)
     {
-        $configService = new Config();
+        $config = Application::getInstance()->getAppConfig();
+        $testFile = $config['directories']['reports'] . self::TEST_NAME;
+        // run and load phpunit test
+        // log tests output
+        shell_exec('cd ' . MAIN_PATH . '&& ' . MAIN_PATH . 'vendor/bin/phpunit --log-junit ' . $testFile . ' -c app/');
 
-        if ($configService->hasError()) {
+        if ($value->check()) {
             $this->context->buildViolation($constraint->message)
                 ->addViolation();
         }

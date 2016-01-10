@@ -4,6 +4,7 @@
 namespace Mailer\Service;
 
 use Symfony\Component\Config\ConfigCache;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Validator\RecursiveValidator;
@@ -48,14 +49,45 @@ class Utils
 
     /**
      * @param string $file
+     * @param array $data
+     * @param string $key
+     * @param string $cacheDir
+     * @return bool
+     */
+    public function rewrite($file, $data, $key, $cacheDir = '')
+    {
+        $fileData = $this->readFile($file)['app'];
+
+        if ($fileData && array_key_exists($key, $fileData)) {
+            $fileData[$key] = $data[$key];
+
+            $fs = new Filesystem();
+            $fs->remove($file);
+
+            if ($cacheDir) {
+                $fileInfo = new \SplFileInfo($file);
+                $fs->remove($this->getCacheName($fileInfo, $cacheDir));
+            }
+
+            $this->check($file);
+            $this->writeFile(array('app' => $fileData), $file);
+
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * @param string $file
      * @param string $cacheDir
      * @param boolean $debug
      * @return array
      */
-    function cache($file, $cacheDir, $debug = false)
+    public function cache($file, $cacheDir, $debug = false)
     {
         $fileInfo = new \SplFileInfo($file);
-        $cacheFile = $cacheDir . '/' . $fileInfo->getBasename($fileInfo->getExtension()) . '.php';
+        $cacheFile = $this->getCacheName($fileInfo, $cacheDir);
 
         // the second argument indicates whether or not you want to use debug mode
         $userMatcherCache = new ConfigCache($cacheFile, $debug);
@@ -73,6 +105,16 @@ class Utils
 
         // you may want to require the cached code:
         return require($cacheFile);
+    }
+
+    /**
+     * @param \SplFileInfo $fileInfo
+     * @param string $cacheDir
+     * @return string
+     */
+    protected function getCacheName(\SplFileInfo $fileInfo, $cacheDir)
+    {
+        return $cacheDir . '/' . $fileInfo->getBasename($fileInfo->getExtension()) . 'php';
     }
 
     /**
@@ -116,5 +158,24 @@ class Utils
             ->setContentType('text/html')
             ->setTo($sendTo)
             ->setBody($content, 'text/html'));
+    }
+
+    /**
+     * @param array $parameters
+     * @param array $defaults
+     * @return array
+     */
+    public function setDefaults($parameters, $defaults)
+    {
+        $resolver = new OptionsResolver();
+        $resolver->setDefaults($defaults);
+
+        foreach ($parameters as $key => $parameter) {
+            if (!$resolver->hasDefault($key)) {
+                unset($parameters[$key]);
+            };
+        }
+
+        return $resolver->resolve($parameters);
     }
 }

@@ -1,6 +1,15 @@
 {% extends 'base.html.twig' %}
 {% block title %} | Configuration{% endblock %}
 
+{% form_theme form _self %}
+
+{%- block form_row -%}
+    <div>
+        {{- form_label(form) -}}
+        {{- form_widget(form) -}}
+    </div>
+{%- endblock form_row -%}
+
 {%  block header %}
     <h1>{{ 'config_mail'|trans }}</h1>
 {% endblock %}
@@ -14,6 +23,7 @@
                     <li>{{ error.message }}</li>
                 {% endfor %}
             </ul>
+            {{ form_errors(form) }}
         </div>
     {% endif %}
 
@@ -21,10 +31,7 @@
         <div class="content margin">
             <pre><i></i>{{ 'add_config'|trans }}</pre>
 
-            <form action="{{ path('config') }}" method="post">
-                {{ form_widget(form) }}
-                <input type="submit" name="send" value="{{ 'send'|trans }}" class="button"/>
-            </form>
+            {{ form(form) }}
         </div>
     </div>
 {% endblock %}
