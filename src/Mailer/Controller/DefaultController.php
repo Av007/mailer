@@ -136,7 +136,7 @@ class DefaultController
     /**
      * Validate Configuration. Ajax method
      */
-    public function validateAction(Request $request)
+    public function validateAction()
     {
         $application = Application::getInstance();
         $app = $application->getApp();

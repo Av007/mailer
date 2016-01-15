@@ -3,7 +3,6 @@
 namespace Mailer\Form;
 
 use Symfony\Component\Form\Extension\Core\Type;
-use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Class ConfigType
