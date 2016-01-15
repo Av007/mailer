@@ -128,7 +128,8 @@ class Utils
         $errors = array();
         $resolver = new OptionsResolver();
         $resolver->setDefaults(array(
-            'send_to' => null
+            'send_to' => null,
+            'content' => null,
         ));
 
         $data = $resolver->resolve($parameters);
@@ -138,11 +139,11 @@ class Utils
         if (!is_array($sendTo)) {
             $sendTo = array_filter(explode(',', $data['send_to']));
             foreach ($sendTo as $item) {
-                $errors[] = $validator->validateValue($item, new Assert\Email());
+                $errors = $validator->validate($item, new Assert\Email());
             }
         }
 
-        return $sendTo ;
+        return $sendTo;
     }
 
     /**

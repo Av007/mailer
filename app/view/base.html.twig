@@ -3,41 +3,37 @@
 <head>
     <link rel="shortcut icon" href="/web/favicon.ico" type="image/x-icon">
     <link rel="icon" href="/web/favicon.ico" type="image/x-icon">
-    <link href="css/style.css" rel="stylesheet" />
-    <link href="css/ikSelect.css" media="all" rel="stylesheet">
-    <link href="css/ikSelectCustom.css" media="all" rel="stylesheet">
-    <link href="css/normalize.min.css" media="all" rel="stylesheet">
-    <link href="fonts/Tinos-Regular.ttf" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Tinos&subset=latin,cyrillic-ext' rel='stylesheet' type='text/css'>
+    <link href="css/main.css" rel="stylesheet" />
     <title>Send mail{% block title %}{% endblock %}</title>
 </head>
 <body>
-
-    <div id="topBar">
+    <nav>
         <a href="#" id="more">
             <span id="lang">{{ 'options'|trans }}</span>
-                <span id="arrow">
-                    <span class="arrdown">&#x25BC;</span>
-                    <span class="arrup">&#x25B2;</span>
-                </span>
+            <span id="arrow">
+                <span class="arrdown">&#x25BC;</span>
+                <span class="arrup">&#x25B2;</span>
+            </span>
         </a>
+
         <div class="dropdown">
             <a href="{{ url('lang') }}">{{ 'language'|trans }}</a>
         </div>
-    </div>
-
-    {%  block header %}{% endblock %}
-
-    {% for message in app.session.getFlashBag.get('success') %}
-        <div class="blue">
-            <p>{{ message|trans }}</p>
+    </nav>
+    <section class="container">
+        {% block header %}{% endblock %}
+        <div class="flash-messages">
+            {% for message in app.session.getFlashBag.get('success') %}
+                <div class="flash">
+                    <p>{{ message|trans }}</p>
+                </div>
+            {% endfor %}
         </div>
-    {% endfor %}
-
-    {%  block content %}{% endblock %}
+        {% block content %}{% endblock %}
+    </section>
 
     {%  block javascript %}{% endblock %}
-    <script type="text/javascript" src="js/vendor/jquery-1.9.1.min.js"></script>
-    <script type="text/javascript" src="js/jquery.ikSelect.min.js"></script>
-    <script type="text/javascript" src="js/app.js"></script>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
 </body>
 </html>

@@ -16,21 +16,21 @@
 
 {%  block content %}
     {% if errors %}
-        <div class="errors">
-            <h3><i></i>{{ 'user_errors'|trans }}</h3>
-            <ul>
-                {% for error in errors %}
-                    <li>{{ error.message }}</li>
-                {% endfor %}
-            </ul>
-            {{ form_errors(form) }}
+        <div class="flash-messages">
+            <div class="flash flash-error">
+                <h3><i></i>{{ 'user_errors'|trans }}</h3>
+
+                <ul>
+                    {% for error in errors %}
+                        <li>{{ error.message }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
         </div>
     {% endif %}
 
     <div class="comment">
         <div class="content margin">
-            <pre><i></i>{{ 'add_config'|trans }}</pre>
-
             {{ form(form) }}
         </div>
     </div>

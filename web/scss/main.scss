@@ -1,0 +1,59 @@
+
+@import "../bower_components/primer-css/scss/variables";
+@import "../bower_components/primer-css/scss/mixins";
+
+// Basecoat
+@import "../bower_components/primer-css/scss/normalize";
+
+@import "../bower_components/primer-css/scss/base";
+@import "../bower_components/primer-css/scss/type";
+@import "../bower_components/primer-css/scss/layout";
+@import "../bower_components/primer-css/scss/forms";
+@import "../bower_components/primer-css/scss/utility";
+@import "../bower_components/primer-css/scss/alerts";
+@import "../bower_components/primer-css/scss/buttons";
+
+$color: #645a39;
+$background: #2A2829;
+$solid: #87c0da;
+$yellow: #F5D867;
+
+@import "mailer/buttons";
+@import "mailer/forms";
+@import "mailer/alert";
+@import "mailer/topbar";
+@import "mailer/type";
+
+::-moz-selection {
+  background: #b3d4fc;
+  text-shadow: none
+}
+
+::selection {
+  background: #b3d4fc;
+  text-shadow: none
+}
+
+body {
+  background: $background;
+  color: $color;
+  font-family: 'Tinos', serif;
+  padding: 20px;
+}
+
+.center {
+  margin-left: auto;
+  margin-right: auto;
+  width: 180px;
+  top: 100px;
+  position: relative;
+}
+
+.arrup {
+  display: none;
+}
+
+.arrow {
+  font-size: 0.6em;
+}
+

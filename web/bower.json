@@ -4,7 +4,7 @@
   "authors": [
     "Avdeev Vladimir <vladimir@speakaboos.com>"
   ],
-  "description": "sends html emails",
+  "description": "Sends html or plain text emails",
   "main": "",
   "moduleType": [
     "globals"
@@ -22,5 +22,9 @@
     "bower_components",
     "test",
     "tests"
-  ]
+  ],
+  "dependencies": {
+    "primer-css": "~2.5.0",
+    "jquery": "~2.2.0"
+  }
 }

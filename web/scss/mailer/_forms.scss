@@ -1,0 +1,61 @@
+$form-color: #777;
+
+label {
+  @extend label;
+  font-size: 15px;
+}
+
+input[type="text"],
+input[type="password"],
+textarea {
+  @extend .form-control;
+  border: 1px solid $color;
+  font: 13px "Times New Roman";
+  color: $form-color;
+  margin-bottom: 10px;
+  background: transparent;
+  width: 100%;
+}
+
+select {
+  @extend select;
+  @extend textarea;
+  option {
+    @extend option;
+    background: $background;
+    color: $form-color;
+  }
+}
+
+.inline_form {
+  width: 166px;
+  min-height: 400px;
+  button {
+    display: inline-block;
+    width: 100%;
+    .button {
+      float: right;
+      margin-right: 19px;
+      margin-top: 4px;
+      position: relative;
+    }
+  }
+}
+
+.dropdown {
+  display: none;
+  position: absolute;
+  right: 5px;
+  background: #2A2829;
+  color: $color;
+  top: 25px;
+  a {
+    display: block;
+    color: $color !important;
+    text-decoration: none;
+    padding: 5px 7px;
+    &:hover {
+      background: #2A2829;
+    }
+  }
+}

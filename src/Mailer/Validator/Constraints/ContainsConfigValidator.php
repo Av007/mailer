@@ -23,7 +23,7 @@ class ContainsConfigValidator extends ConstraintValidator
         // log tests output
         shell_exec('cd ' . MAIN_PATH . '&& ' . MAIN_PATH . 'vendor/bin/phpunit --log-junit ' . $testFile . ' -c app/');
 
-        if ($value->check()) {
+        if ($value->checkReport()) {
             $this->context->buildViolation($constraint->message)
                 ->addViolation();
         }

@@ -1,0 +1,28 @@
+.comment {
+  border: 1px solid $yellow;
+  margin: 0 auto;
+  padding: 20px;
+  &.blue {
+    color: $solid;
+  }
+}
+
+.blue p {
+  background: none repeat scroll 0 0 #47BC5F;
+  border: 1px solid $background;
+  border-radius: 10px 10px 10px 10px;
+  color: $background;
+  padding: 5px;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+h3 {
+  margin-top: 0px;
+  background: none repeat scroll 0 0 $solid;
+  border: 5px double $background;
+  padding: 5px;
+  font-size: 12px;
+  font-weight: bold;
+  color: $background;
+}
