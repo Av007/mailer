@@ -1,11 +1,13 @@
 {
-  "name": "web",
+  "name": "av007/mailer",
   "version": "1.0.0",
-  "description": "",
+  "description": "Helps send email from localhost",
   "main": "gulpfile.js",
   "dependencies": {
     "gulp": "^3.9.0",
-    "gulp-load-plugins": "^1.2.0"
+    "gulp-load-plugins": "^1.2.0",
+    "jquery": "^3.2.1",
+    "primer-css": "^6.0.0"
   },
   "devDependencies": {
     "gulp-minify-css": "^1.2.3",
@@ -14,6 +16,6 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "Vladimir Avdeev <avdeevvladimir@gmail.com>",
   "license": "ISC"
 }

@@ -7,35 +7,38 @@ var minifyCss = require('gulp-minify-css');
 // File paths to various assets are defined here.
 var PATHS = {
     js: [
-        'bower_components/jquery/dist/jquery.min.js',
-        'bower_components/jquery/dist/jquery.min.map'
+        'node_modules/jquery/dist/jquery.min.js',
+        'node_modules/jquery/dist/jquery.min.map'
     ]
 };
 
 gulp.task('js', function () {
     return gulp.src(PATHS.js)
-        .pipe(gulp.dest('js'));
+        .pipe(gulp.dest('web/js'));
 });
 
 gulp.task('css', function () {
-    return gulp.src(['stylesheets/*.css'])
-        .pipe(gulp.dest('css'));
+    return gulp.src(['web/stylesheets/*.css'])
+        .pipe(gulp.dest('web/css'));
 });
 
 // Compile Sass into CSS
 gulp.task('sass', function () {
-    gulp.src('./scss/*.scss')
+    gulp.src('web/scss/main.scss')
+        .pipe(sass({
+            includePaths: 'node_modules'
+         }).on('error', sass.logError))
         .pipe(sass.sync().on('error', sass.logError))
         .pipe(minifyCss())
-        .pipe(gulp.dest('./css'));
+        .pipe(gulp.dest('web/css'));
 });
 
 gulp.task('sass:watch', function () {
-    gulp.watch('./sass/*.scss', ['sass']);
+    gulp.watch('web/sass/*.scss', ['sass']);
 });
 
 gulp.task('default', ['sass', 'js']);
 
 gulp.task('sass:watch', function () {
-    gulp.watch('./sass/*.scss', ['sass']);
+    gulp.watch('web/sass/*.scss', ['sass']);
 });

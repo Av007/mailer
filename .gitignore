@@ -10,5 +10,4 @@ app/report/testsuites.xml
 composer.phar
 
 # Frontend
-web/bower_components
-web/node_modules
+node_modules

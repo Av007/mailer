@@ -8,6 +8,8 @@ use Mailer\Service\Utils;
 use Silex\Provider;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Translation\Loader\YamlFileLoader;
+use Symfony\Component\Translation\Translator;
+
 
 /**
  * Class Bootstrap
@@ -18,16 +20,21 @@ use Symfony\Component\Translation\Loader\YamlFileLoader;
 class Application extends Utils
 {
     const FILE_NAME = '/config.yml';
+
     const TEMP_NAME = '/config.yml.dist';
 
     /** @var \Silex\Application $app */
     protected $app;
+
     /** @var array $appConfig */
     protected $appConfig = array();
+
     /** @var array $config */
     protected $config = array();
+
     /** @var Application $instance */
     protected static $instance;
+
 
     /**
      * @throws \Exception
@@ -68,7 +75,8 @@ class Application extends Utils
     {
         $this->app['debug'] = $this->getConfig('debug');
         $this->app->register(new Provider\TranslationServiceProvider(), array(
-            'locale_fallback' => $this->getConfig('default_language'),
+            'locale'           => $this->getConfig('default_language'),
+            'locale_fallbacks' => $this->getConfig('languages'),
         ));
         $this->app->register(new Provider\FormServiceProvider());
         $this->app->register(new Provider\ValidatorServiceProvider(), array(
@@ -79,7 +87,7 @@ class Application extends Utils
         $this->app->register(new Provider\SwiftmailerServiceProvider(), array(
             'swiftmailer.options' => $this->getConfig('email')
         ));
-        $this->app->register(new Provider\UrlGeneratorServiceProvider());
+        //$this->app->register(new Provider\UrlGeneratorServiceProvider());
         $this->app->register(new Provider\ServiceControllerServiceProvider());
         $this->app->register(new Provider\TwigServiceProvider(), array(
             'twig.path'    => array($this->appConfig['directories']['view']),
@@ -95,15 +103,16 @@ class Application extends Utils
 
             return $this->app;
         });
+
         // enable localization
-        $this->app['translator'] = $this->app->share($this->app->extend('translator', function(\Silex\Translator $translator) {
+        $this->app->extend('translator', function(Translator $translator, $app) {
             $translator->addLoader('yaml', new YamlFileLoader());
             $translator->addResource('yaml', $this->appConfig['directories']['locales'] . 'en.yml', 'en');
             $translator->addResource('yaml', $this->appConfig['directories']['locales'] . 'ru.yml', 'ru');
             $translator->addResource('yaml', $this->appConfig['directories']['locales'] . 'ru.yml', 'ru', 'validators');
 
             return $translator;
-        }));
+        });
     }
 
     /**
@@ -111,9 +120,9 @@ class Application extends Utils
      */
     protected function initRoute()
     {
-        $this->app['default.controller'] = $this->app->share(function() {
+        $this->app['default.controller'] = function() {
             return new DefaultController();
-        });
+        };
 
         $routies = $this->readConfig($this->appConfig['directories']['config'] . '/routes.yml');
         foreach ($routies as $name => $route) {
